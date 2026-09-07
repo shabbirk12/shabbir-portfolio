@@ -78,7 +78,7 @@ async function main() {
 
   console.log("Creating initial admin user...");
   const username = process.env.SEED_ADMIN_USERNAME || "admin";
-  const email = process.env.SEED_ADMIN_EMAIL || "hello@shabbirk.com";
+  const email = process.env.SEED_ADMIN_EMAIL || "contact@shabbirkhan.dev";
   const password = process.env.SEED_ADMIN_PASSWORD;
 
   if (!password) {

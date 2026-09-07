@@ -7,7 +7,7 @@ import { getSiteSettings } from "@/lib/siteSettings";
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   return {
-    metadataBase: new URL("https://shabbirk.com"),
+    metadataBase: new URL("https://shabbirkhan.dev"),
     title: settings.title,
     description:
       "Freelance designer-developer building brand identities, event campaigns and full-stack products for hospitality, finance and the events scene.",
@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: settings.title,
       description: "Brand systems, product engineering and codeless web builds.",
-      url: "https://shabbirk.com",
+      url: "https://shabbirkhan.dev",
       siteName: "Shabbir Khan",
       type: "website",
     },

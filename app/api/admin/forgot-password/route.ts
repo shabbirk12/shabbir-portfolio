@@ -6,8 +6,6 @@ import { checkRateLimit } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
-const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "site@shabbirk.com";
-
 function getSiteUrl(): string {
   return process.env.SITE_URL || "http://localhost:3000";
 }
@@ -33,11 +31,17 @@ export async function POST(req: Request) {
     // Only actually send an email if the account exists — but always return
     // the same success response either way, so this endpoint can't be used
     // to check which emails have admin accounts.
-    if (token && process.env.RESEND_API_KEY) {
-      const resend = new Resend(process.env.RESEND_API_KEY);
+    const apiKey = process.env.RESEND_API_KEY?.trim();
+    if (token && apiKey) {
+      const rawFrom = process.env.CONTACT_FROM_EMAIL?.trim() || "contact@shabbirkhan.dev";
+      const fromAddress = rawFrom.includes("<")
+        ? rawFrom
+        : `Portfolio Admin <${rawFrom}>`;
+
+      const resend = new Resend(apiKey);
       const resetUrl = `${getSiteUrl()}/admin/reset-password/${token}`;
       await resend.emails.send({
-        from: `Portfolio Admin <${FROM_EMAIL}>`,
+        from: fromAddress,
         to: email,
         subject: "Reset your admin password",
         text: `Reset your password: ${resetUrl}\n\nThis link expires in 1 hour. If you didn't request this, ignore this email.`,

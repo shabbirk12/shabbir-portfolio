@@ -514,7 +514,7 @@ Project Settings → Environment Variables. Add:
 | `DATABASE_URL` | from Step 1 (skip if Vercel's Postgres integration set it automatically — it may be named `POSTGRES_URL`; if so, either rename it or add `DATABASE_URL` pointing to the same value) |
 | `BLOB_READ_WRITE_TOKEN` | from Step 2 (usually auto-set) |
 | `ADMIN_SESSION_SECRET` | a random 32+ character string — generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
-| `SITE_URL` | your production URL, e.g. `https://shabbirk.com` (used to build password-reset links) |
+| `SITE_URL` | your production URL, e.g. `https://shabbirkhan.dev` (used to build password-reset links) |
 | `RESEND_API_KEY` | your Resend key (needed for both the contact form and password-reset emails) |
 | `CONTACT_FROM_EMAIL` | a verified sending address on your Resend domain |
 | `CONTACT_TO_EMAIL` | where contact form submissions should land |

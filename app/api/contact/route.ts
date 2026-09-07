@@ -3,9 +3,6 @@ import { Resend } from "resend";
 
 export const runtime = "nodejs";
 
-const TO_EMAIL = process.env.CONTACT_TO_EMAIL || "hello@shabbirk.com";
-const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "site@shabbirk.com";
-
 export async function POST(req: Request) {
   try {
     const { name, email, message } = await req.json();
@@ -21,21 +18,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "That email doesn't look right." }, { status: 400 });
     }
 
-    if (!process.env.RESEND_API_KEY) {
-      // Fails loudly in dev if the env var hasn't been set yet, instead of
-      // silently pretending the email sent.
+    const apiKey = process.env.RESEND_API_KEY?.trim();
+    if (!apiKey) {
       console.error("RESEND_API_KEY is not set.");
       return NextResponse.json(
-        { error: "Email is not configured on the server yet." },
+        { error: "Email is not configured on the server yet (missing RESEND_API_KEY)." },
         { status: 500 }
       );
     }
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    const toEmail = process.env.CONTACT_TO_EMAIL?.trim() || "shabbirk.sk12@gmail.com";
+    const rawFrom = process.env.CONTACT_FROM_EMAIL?.trim() || "contact@shabbirkhan.dev";
+    const fromAddress = rawFrom.includes("<")
+      ? rawFrom
+      : `Studio Contact Form <${rawFrom}>`;
 
-    const { error } = await resend.emails.send({
-      from: `Studio Contact Form <${FROM_EMAIL}>`,
-      to: TO_EMAIL,
+    const resend = new Resend(apiKey);
+
+    const { data, error } = await resend.emails.send({
+      from: fromAddress,
+      to: toEmail,
       replyTo: email,
       subject: `New enquiry from ${name}`,
       text: `From: ${name} <${email}>\n\n${message}`,
@@ -43,12 +45,18 @@ export async function POST(req: Request) {
 
     if (error) {
       console.error("Resend error:", error);
-      return NextResponse.json({ error: "Couldn't send that — try again shortly." }, { status: 502 });
+      return NextResponse.json(
+        { error: error.message || "Failed to send email via Resend." },
+        { status: 502 }
+      );
     }
 
-    return NextResponse.json({ ok: true });
-  } catch (err) {
+    return NextResponse.json({ ok: true, id: data?.id });
+  } catch (err: any) {
     console.error("Contact route error:", err);
-    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
+    return NextResponse.json(
+      { error: err?.message || "Something went wrong." },
+      { status: 500 }
+    );
   }
 }

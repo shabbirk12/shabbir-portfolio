@@ -5,7 +5,7 @@ export const profile = {
   location: "Islamabad, Pakistan",
   intro:
     "Freelance designer-developer building brand identities, e-commerce and booking sites, and full-stack products for hospitality, finance and the events scene.",
-  email: "hello@shabbirk.com",
+  email: "contact@shabbirkhan.dev",
   linkedin: "linkedin.com/in/shabbirk",
   github: "github.com/shabbirk12",
   cv: "/cv.pdf",
