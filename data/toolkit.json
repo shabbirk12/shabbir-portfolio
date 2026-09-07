@@ -1,0 +1,50 @@
+[
+  {
+    "heading": "DESIGN",
+    "tag": "/ SURFACE",
+    "items": [
+      {
+        "name": "Photoshop",
+        "tag": "RASTER · RETOUCH"
+      },
+      {
+        "name": "Illustrator",
+        "tag": "VECTOR · IDENTITY"
+      },
+      {
+        "name": "Brand Systems",
+        "tag": "LOGO · GUIDELINES"
+      },
+      {
+        "name": "Layout & UI",
+        "tag": "EDITORIAL · WEB"
+      }
+    ]
+  },
+  {
+    "heading": "ENGINEERING",
+    "tag": "/ SOURCE",
+    "items": [
+      {
+        "name": "React",
+        "tag": "INTERFACES"
+      },
+      {
+        "name": "Next.js",
+        "tag": "APP ROUTER · SSR"
+      },
+      {
+        "name": "TypeScript",
+        "tag": "TYPE-SAFE"
+      },
+      {
+        "name": "Node · Express",
+        "tag": "APIS"
+      },
+      {
+        "name": "MongoDB",
+        "tag": "DATA"
+      }
+    ]
+  }
+]

@@ -1,0 +1,550 @@
+[
+  {
+    "index": "01",
+    "year": "2026",
+    "tag": "Brand & Web",
+    "title": "The Camden Brokers",
+    "slug": "camden-brokers",
+    "summary": "Positioning and website copy for a luxury multi-asset brokerage spanning property, hotels, cars and yachts — punchy, minimal UK English throughout.",
+    "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80",
+    "stats": [
+      {
+        "value": "3",
+        "label": "ASSET CLASSES"
+      },
+      {
+        "value": "100%",
+        "label": "COPY REWRITE"
+      },
+      {
+        "value": "1",
+        "label": "WP BUILD"
+      }
+    ],
+    "caseStudy": {
+      "role": "BRAND · COPY · WEB BUILD",
+      "timeline": "6 weeks",
+      "status": "LIVE",
+      "heroLine": "A luxury brokerage's entire web presence, rebuilt around one voice across three very different asset classes.",
+      "context": {
+        "summary": "The Camden Brokers sells property, hotels, cars and yachts to the same high-net-worth client — but the existing site read like three separate businesses stitched together, each with its own tone and layout logic.",
+        "stats": [
+          {
+            "value": "3",
+            "label": "ASSET CLASSES"
+          },
+          {
+            "value": "1",
+            "label": "BRAND VOICE"
+          },
+          {
+            "value": "0",
+            "label": "TEMPLATES REUSED"
+          }
+        ]
+      },
+      "challenge": "Luxury brokerage copy tends to default to generic superlatives — 'exquisite', 'unparalleled', 'bespoke' — which stops meaning anything by the second paragraph. The brief needed restraint: short sentences, real specifics, and a site structure flexible enough to hold property listings, hotel partnerships and yacht charters without forcing one template onto all three.",
+      "build": {
+        "summary": "Full copy rewrite across every page, paired with a WordPress build using Elementor Pro for layout flexibility across asset types.",
+        "bullets": [
+          "Rewrote every page in punchy, minimal UK English — cut adjective density by more than half",
+          "Built a WordPress + Elementor Pro structure that reuses one component system across three asset classes",
+          "Set up SEO keyword targeting per asset class rather than one blended strategy",
+          "Established a lightweight style guide so the client's team can add new listings without breaking tone"
+        ]
+      },
+      "gallery": [
+        {
+          "label": "Homepage — hero & asset selector",
+          "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Hotel partnerships listing",
+          "image": "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Site build — code view",
+          "image": "https://images.unsplash.com/photo-1774901128302-e2bbd154da44?auto=format&fit=crop&q=80"
+        }
+      ],
+      "results": {
+        "summary": "The rebuilt site launched with a consistent voice across all three verticals and gave the client's internal team a system they can extend without design support.",
+        "stats": [
+          {
+            "value": "3",
+            "label": "ASSET CLASSES UNIFIED"
+          },
+          {
+            "value": "100%",
+            "label": "PAGES REWRITTEN"
+          },
+          {
+            "value": "6wk",
+            "label": "BRIEF TO LAUNCH"
+          },
+          {
+            "value": "1",
+            "label": "DESIGN SYSTEM"
+          }
+        ],
+        "quote": "IT FINALLY SOUNDS LIKE ONE COMPANY, NOT THREE."
+      }
+    }
+  },
+  {
+    "index": "02",
+    "year": "2026",
+    "tag": "Web Development",
+    "title": "Riverside Hotel Group",
+    "slug": "riverside-hotel-group",
+    "summary": "A multi-property booking website for a small hotel group — real-time availability, a custom booking widget, and a CMS the client's team runs themselves.",
+    "image": "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?auto=format&fit=crop&q=80",
+    "stats": [
+      {
+        "value": "4",
+        "label": "PROPERTIES"
+      },
+      {
+        "value": "1",
+        "label": "BOOKING ENGINE"
+      },
+      {
+        "value": "0",
+        "label": "THIRD-PARTY FEES"
+      }
+    ],
+    "caseStudy": {
+      "role": "FULL-STACK · WEB BUILD",
+      "timeline": "8 weeks",
+      "status": "LIVE",
+      "heroLine": "A real booking engine for a four-property hotel group, built to replace a third-party platform taking a cut of every reservation.",
+      "context": {
+        "summary": "Riverside Hotel Group ran bookings through a third-party aggregator that took a commission on every reservation and buried their four properties behind generic listing pages.",
+        "stats": [
+          {
+            "value": "4",
+            "label": "PROPERTIES"
+          },
+          {
+            "value": "1",
+            "label": "OWNED BOOKING FLOW"
+          },
+          {
+            "value": "0%",
+            "label": "PLATFORM COMMISSION"
+          }
+        ]
+      },
+      "challenge": "Booking engines are unforgiving — real-time availability across four properties, date logic, room-type pricing, and a checkout flow that has to work flawlessly on a phone, since most bookings happen there. Getting this wrong means lost reservations, not just a bad review.",
+      "build": {
+        "summary": "A Next.js frontend with a custom booking widget wired to a lightweight availability API, plus a CMS layer so the client's own team manages rooms, rates and property content without touching code.",
+        "bullets": [
+          "Built a custom booking widget — live availability, room-type pricing, date logic, all mobile-first",
+          "Connected the widget to a lightweight availability API shared across all four properties",
+          "Set up a CMS layer so reception staff can update rates and room content directly",
+          "Migrated bookings off the third-party aggregator entirely, removing the per-booking commission"
+        ]
+      },
+      "gallery": [
+        {
+          "label": "Property listing page",
+          "image": "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Booking widget — live availability",
+          "image": "https://images.unsplash.com/photo-1774901128302-e2bbd154da44?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Mobile checkout flow",
+          "image": "https://images.unsplash.com/photo-1745368036244-eda2fcbb9d45?auto=format&fit=crop&q=80"
+        }
+      ],
+      "results": {
+        "summary": "The group now owns its full booking flow across all four properties, with reception staff managing rates directly instead of filing update requests.",
+        "stats": [
+          {
+            "value": "4",
+            "label": "PROPERTIES LIVE"
+          },
+          {
+            "value": "0%",
+            "label": "COMMISSION PAID"
+          },
+          {
+            "value": "8wk",
+            "label": "BRIEF TO LAUNCH"
+          },
+          {
+            "value": "1",
+            "label": "SHARED CMS"
+          }
+        ],
+        "quote": "WE OWN OUR BOOKINGS NOW, NOT A PLATFORM."
+      }
+    }
+  },
+  {
+    "index": "03",
+    "year": "2025—26",
+    "tag": "Product",
+    "title": "WatBee",
+    "slug": "watbee",
+    "summary": "WhatsApp bulk-messaging SaaS — React on Vercel, FastAPI on Railway, MongoDB, plus a Puppeteer QR-scan sidecar for WhatsApp Web sessions.",
+    "image": "https://images.unsplash.com/photo-1682941664177-7920d0e59418?auto=format&fit=crop&q=80",
+    "stats": [
+      {
+        "value": "3",
+        "label": "SERVICES"
+      },
+      {
+        "value": "2",
+        "label": "STEP ONBOARDING"
+      },
+      {
+        "value": "1",
+        "label": "CSV IMPORT"
+      }
+    ],
+    "caseStudy": {
+      "role": "FULL-STACK · PRODUCT",
+      "timeline": "Ongoing",
+      "status": "IN DEVELOPMENT",
+      "heroLine": "A WhatsApp bulk-messaging platform, built and operated end to end — frontend, API, database and the WhatsApp session layer itself.",
+      "context": {
+        "summary": "WatBee (formerly WAMaster) is a product I design, build and run myself — a WhatsApp bulk-messaging SaaS for small businesses that need to reach customers without paying for enterprise WhatsApp Business API access.",
+        "stats": [
+          {
+            "value": "3",
+            "label": "SERVICES"
+          },
+          {
+            "value": "1",
+            "label": "FOUNDER-BUILT"
+          },
+          {
+            "value": "0",
+            "label": "OUTSOURCED CODE"
+          }
+        ]
+      },
+      "challenge": "Keeping a WhatsApp Web session alive independently of the main API, without it taking down registration or billing when it inevitably needs a restart — while also fixing the usual first-product list: broken auth, CORS mismatches, and a JSON serialization bug that made registration silently fail.",
+      "build": {
+        "summary": "A React frontend on Vercel, a FastAPI backend on Railway, MongoDB for storage, and a standalone Node/Puppeteer microservice purely for WhatsApp Web QR sessions.",
+        "bullets": [
+          "Split the WhatsApp Web session handler into its own Railway service so it can restart independently",
+          "Fixed MongoDB auth failures, a broken JWT secret, and CORS mismatches between frontend and API",
+          "Built a two-step registration flow with email verification via Resend",
+          "Scoped CSV bulk import, Stripe/Payoneer billing, and a super admin dashboard"
+        ]
+      },
+      "gallery": [
+        {
+          "label": "Dashboard — campaign overview",
+          "image": "https://images.unsplash.com/photo-1682941664177-7920d0e59418?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Backend — API & session logic",
+          "image": "https://images.unsplash.com/photo-1774901128302-e2bbd154da44?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "CSV contact import",
+          "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80"
+        }
+      ],
+      "results": {
+        "summary": "The core send pipeline, auth, and session sidecar are stable in development, with billing and the admin dashboard scoped as the next milestones.",
+        "stats": [
+          {
+            "value": "3",
+            "label": "SERVICES RUNNING"
+          },
+          {
+            "value": "1",
+            "label": "SESSION SIDECAR"
+          },
+          {
+            "value": "2",
+            "label": "STEP ONBOARDING"
+          },
+          {
+            "value": "1",
+            "label": "PERSON BUILDING IT"
+          }
+        ],
+        "quote": "THE KIND OF PRODUCT WORK THAT TEACHES YOU EVERY LAYER OF THE STACK."
+      }
+    }
+  },
+  {
+    "index": "04",
+    "year": "2026",
+    "tag": "Web Development",
+    "title": "Camden Finance Partners",
+    "slug": "camden-finance-partners",
+    "summary": "A client portal for a boutique finance firm — secure document sharing, live portfolio summaries, and single sign-on, replacing an email-and-spreadsheet workflow.",
+    "image": "https://images.unsplash.com/photo-1774901128302-e2bbd154da44?auto=format&fit=crop&q=80",
+    "stats": [
+      {
+        "value": "1",
+        "label": "CLIENT PORTAL"
+      },
+      {
+        "value": "SSO",
+        "label": "AUTH"
+      },
+      {
+        "value": "0",
+        "label": "EMAIL ATTACHMENTS"
+      }
+    ],
+    "caseStudy": {
+      "role": "FULL-STACK · WEB APP",
+      "timeline": "10 weeks",
+      "status": "LIVE",
+      "heroLine": "A secure client portal that replaced a finance firm's email-and-spreadsheet workflow with one place clients actually log into.",
+      "context": {
+        "summary": "Camden Finance Partners managed client documents and portfolio updates over email — a slow, insecure workflow that made it hard for clients to find anything and hard for the firm to track who'd seen what.",
+        "stats": [
+          {
+            "value": "1",
+            "label": "PORTAL, NOT EMAIL"
+          },
+          {
+            "value": "0",
+            "label": "SPREADSHEET HANDOFFS"
+          },
+          {
+            "value": "SSO",
+            "label": "SINGLE SIGN-ON"
+          }
+        ]
+      },
+      "challenge": "Finance clients don't want another login to remember, and the firm couldn't afford a security misstep with sensitive documents. The portal had to feel effortless to log into, handle document access permissions correctly per client, and never once feel like 'enterprise software'.",
+      "build": {
+        "summary": "A Next.js app with NextAuth single sign-on, role-based document access, and a live portfolio summary view pulling from the firm's existing data sources.",
+        "bullets": [
+          "Built single sign-on with NextAuth so clients log in without a new password to manage",
+          "Set up role-based document permissions — each client sees only their own files",
+          "Built a live portfolio summary view replacing static PDF reports",
+          "Migrated the firm off email attachments entirely for sensitive documents"
+        ]
+      },
+      "gallery": [
+        {
+          "label": "Client dashboard — portfolio summary",
+          "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Secure document view",
+          "image": "https://images.unsplash.com/photo-1774901128302-e2bbd154da44?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Login — single sign-on",
+          "image": "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?auto=format&fit=crop&q=80"
+        }
+      ],
+      "results": {
+        "summary": "Clients now log into one portal for documents and portfolio updates, with the firm able to see exactly who has accessed what.",
+        "stats": [
+          {
+            "value": "1",
+            "label": "PORTAL REPLACING EMAIL"
+          },
+          {
+            "value": "10wk",
+            "label": "BRIEF TO LAUNCH"
+          },
+          {
+            "value": "0",
+            "label": "PASSWORDS TO MANAGE"
+          },
+          {
+            "value": "100%",
+            "label": "DOCUMENTS MIGRATED"
+          }
+        ],
+        "quote": "CLIENTS FINALLY KNOW WHERE TO LOOK."
+      }
+    }
+  },
+  {
+    "index": "05",
+    "year": "2026",
+    "tag": "Event Identity",
+    "title": "Hip Hop City London",
+    "slug": "hip-hop-city-london",
+    "summary": "Full campaign identity for a headline hip-hop event at The Camden — key art, SEO listing content and social assets, built for a fast, noisy timeline.",
+    "image": "https://images.unsplash.com/photo-1760966362386-e1012dbc3657?auto=format&fit=crop&q=80",
+    "stats": [
+      {
+        "value": "1",
+        "label": "VENUE"
+      },
+      {
+        "value": "12",
+        "label": "ASSETS SHIPPED"
+      },
+      {
+        "value": "1",
+        "label": "SEO CAMPAIGN"
+      }
+    ],
+    "caseStudy": {
+      "role": "EVENT BRAND · KEY ART · SEO",
+      "timeline": "3 weeks",
+      "status": "EVENT DELIVERED",
+      "heroLine": "A full campaign identity for a headline London hip-hop night, built to a promoter's deadline, not a design one.",
+      "context": {
+        "summary": "Hip Hop City London 2026 needed a full identity — key art, listing copy, social assets — for a night at The Camden (65 Crowndale Road), on a promoter's timeline where the date doesn't move for anyone.",
+        "stats": [
+          {
+            "value": "1",
+            "label": "VENUE"
+          },
+          {
+            "value": "3wk",
+            "label": "LEAD TIME"
+          },
+          {
+            "value": "0",
+            "label": "MISSED DEADLINES"
+          }
+        ]
+      },
+      "challenge": "Event campaigns live or die on a phone screen in a group chat, not a portfolio. The identity had to read instantly at thumbnail size, hold up as social content, and still feel distinct from every other night at the same venue.",
+      "build": {
+        "summary": "A key-art system generated with AI-assisted image prompts (Ideogram, Gemini), refined and typeset by hand, plus listing copy written for search and for the scroll.",
+        "bullets": [
+          "Directed and refined AI-generated key art through iterative Ideogram and Gemini prompting",
+          "Typeset a campaign system that reads at thumbnail size and holds up as social content",
+          "Wrote SEO-targeted event listing copy for discovery beyond the venue's own following",
+          "Delivered a full asset set — socials, listing, key art — inside a three-week window"
+        ]
+      },
+      "gallery": [
+        {
+          "label": "Primary key art",
+          "image": "https://images.unsplash.com/photo-1760966362386-e1012dbc3657?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Instagram story set",
+          "image": "https://images.unsplash.com/photo-1745368036244-eda2fcbb9d45?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Event listing page",
+          "image": "https://images.unsplash.com/photo-1774901128302-e2bbd154da44?auto=format&fit=crop&q=80"
+        }
+      ],
+      "results": {
+        "summary": "The campaign shipped on time against a fixed event date, with assets performing across listing and social without a redesign pass.",
+        "stats": [
+          {
+            "value": "12",
+            "label": "ASSETS SHIPPED"
+          },
+          {
+            "value": "3wk",
+            "label": "BRIEF TO EVENT"
+          },
+          {
+            "value": "2",
+            "label": "AI TOOLS DIRECTED"
+          },
+          {
+            "value": "0",
+            "label": "REVISION ROUNDS OVER BUDGET"
+          }
+        ],
+        "quote": "LOOKED LIKE A PROMOTER WITH A BUDGET FIVE TIMES THE SIZE."
+      }
+    }
+  },
+  {
+    "index": "06",
+    "year": "2025",
+    "tag": "Brand",
+    "title": "Kiss Camden",
+    "slug": "kiss-camden",
+    "summary": "Venue identity and print collateral for a Camden nightlife brand — built to hold up on a poster wall and a phone screen alike.",
+    "image": "https://images.unsplash.com/photo-1745368036244-eda2fcbb9d45?auto=format&fit=crop&q=80",
+    "stats": [
+      {
+        "value": "1",
+        "label": "VENUE BRAND"
+      },
+      {
+        "value": "2",
+        "label": "COLLATERAL TYPES"
+      },
+      {
+        "value": "1",
+        "label": "LDN SCENE"
+      }
+    ],
+    "caseStudy": {
+      "role": "BRAND · PRINT",
+      "timeline": "4 weeks",
+      "status": "LIVE",
+      "heroLine": "A venue identity for a Camden nightlife brand, designed to survive a poster wall, a door list and a phone screen.",
+      "context": {
+        "summary": "Kiss Camden needed an identity that could anchor recurring nights under one venue brand, rather than every event inventing its own look from scratch.",
+        "stats": [
+          {
+            "value": "1",
+            "label": "CORE MARK"
+          },
+          {
+            "value": "N",
+            "label": "RECURRING NIGHTS"
+          },
+          {
+            "value": "2",
+            "label": "COLLATERAL FORMATS"
+          }
+        ]
+      },
+      "challenge": "A venue identity has to work at radically different scales and contexts — a small mark on a wristband, a huge one on a poster wall, and everything in between on Instagram — while still feeling like one brand, not a logo plus decoration.",
+      "build": {
+        "summary": "A flexible mark system paired with a print collateral set the venue's team could deploy across recurring nights without commissioning new design work each time.",
+        "bullets": [
+          "Designed a core mark that scales cleanly from wristband to poster wall",
+          "Built a print collateral system — flyers, door lists, wristbands",
+          "Set colour and type rules flexible enough for recurring night variations",
+          "Handed off assets in formats the venue's own team could reuse directly"
+        ]
+      },
+      "gallery": [
+        {
+          "label": "Venue interior & signage",
+          "image": "https://images.unsplash.com/photo-1745368036244-eda2fcbb9d45?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Print collateral set",
+          "image": "https://images.unsplash.com/photo-1760966362386-e1012dbc3657?auto=format&fit=crop&q=80"
+        },
+        {
+          "label": "Core mark & variations",
+          "image": "https://images.unsplash.com/photo-1774901128302-e2bbd154da44?auto=format&fit=crop&q=80"
+        }
+      ],
+      "results": {
+        "summary": "The identity became the standing brand for recurring nights at the venue, reused by the client's own team without further design input.",
+        "stats": [
+          {
+            "value": "1",
+            "label": "BRAND SYSTEM"
+          },
+          {
+            "value": "4wk",
+            "label": "BRIEF TO DELIVERY"
+          },
+          {
+            "value": "0",
+            "label": "REPEAT COMMISSIONS NEEDED"
+          }
+        ],
+        "quote": "ONE MARK, EVERY NIGHT, NO REDESIGNS."
+      }
+    }
+  }
+]

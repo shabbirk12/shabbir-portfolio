@@ -1,0 +1,27 @@
+[
+  {
+    "index": "01",
+    "title": "Brand & Identity",
+    "detail": "Logos, mark systems and guidelines built to survive a print run and a favicon."
+  },
+  {
+    "index": "02",
+    "title": "Web Development",
+    "detail": "Booking engines, client portals and full-stack products — Next.js, React and real APIs."
+  },
+  {
+    "index": "03",
+    "title": "Codeless Web Builds",
+    "detail": "WordPress and Squarespace sites for clients who need to self-edit after launch."
+  },
+  {
+    "index": "04",
+    "title": "Menu & Print",
+    "detail": "Restaurant and bar menus, packaging and collateral — legible first, decorative second."
+  },
+  {
+    "index": "05",
+    "title": "Event Identity",
+    "detail": "Campaign identity and key art for club nights, festivals and one-off events."
+  }
+]

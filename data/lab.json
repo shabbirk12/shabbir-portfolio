@@ -1,0 +1,35 @@
+[
+  {
+    "index": "001",
+    "tags": [
+      "NEXT.JS",
+      "FRAMER MOTION",
+      "3D"
+    ],
+    "title": "Studio Website",
+    "detail": "This portfolio, rebuilt — a 3D hero scene, scroll-triggered motion and a Resend-powered contact flow, shipped on Vercel.",
+    "link": "github.com/shabbirk12/studiowebsite"
+  },
+  {
+    "index": "002",
+    "tags": [
+      "SHADCN/UI",
+      "FRAMER MOTION",
+      "REACT"
+    ],
+    "title": "Component Kit",
+    "detail": "A reusable React component library built on shadcn/ui and Framer Motion — the shared base for client product work and this site.",
+    "link": "github.com/shabbirk12"
+  },
+  {
+    "index": "003",
+    "tags": [
+      "FASTAPI",
+      "MONGODB",
+      "PUPPETEER"
+    ],
+    "title": "WatBee Sidecar",
+    "detail": "A standalone Node/Puppeteer microservice that keeps WhatsApp Web QR sessions alive independently of the main API.",
+    "link": "github.com/shabbirk12/wamaster-webapp"
+  }
+]
