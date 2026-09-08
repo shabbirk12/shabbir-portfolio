@@ -1,5 +1,11 @@
 import "server-only";
 import { query } from "@/lib/db";
+import defaultSkills from "@/data/skills.json";
+import defaultServices from "@/data/services.json";
+import defaultLab from "@/data/lab.json";
+import defaultStats from "@/data/stats.json";
+import defaultAboutDetails from "@/data/about-details.json";
+import defaultToolkit from "@/data/toolkit.json";
 
 export type Collection = "skills" | "services" | "lab" | "stats" | "about-details" | "toolkit";
 
@@ -16,15 +22,28 @@ export function isValidCollection(name: string): name is Collection {
   return (VALID as readonly string[]).includes(name);
 }
 
+const DEFAULTS: Record<Collection, unknown> = {
+  skills: defaultSkills,
+  services: defaultServices,
+  lab: defaultLab,
+  stats: defaultStats,
+  "about-details": defaultAboutDetails,
+  toolkit: defaultToolkit,
+};
+
 export async function readCollection<T = unknown>(name: Collection): Promise<T> {
-  const rows = await query<{ data: T }>(
-    "SELECT data FROM content_collections WHERE name = $1",
-    [name]
-  );
-  if (rows.length === 0) {
-    throw new Error(`Collection "${name}" has no row yet — run the seed script.`);
+  try {
+    const rows = await query<{ data: T }>(
+      "SELECT data FROM content_collections WHERE name = $1",
+      [name]
+    );
+    if (rows.length > 0 && rows[0].data) {
+      return rows[0].data;
+    }
+  } catch (err) {
+    console.warn(`[contentStore] Could not read "${name}" from database, using fallback data:`, err);
   }
-  return rows[0].data;
+  return DEFAULTS[name] as T;
 }
 
 export async function writeCollection(name: Collection, data: unknown): Promise<void> {

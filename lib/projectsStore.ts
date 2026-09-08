@@ -1,20 +1,35 @@
 import "server-only";
 import { query } from "@/lib/db";
 import type { WorkItem } from "@/lib/types";
+import defaultProjects from "@/data/projects.json";
 
 export async function getProjects(): Promise<WorkItem[]> {
-  const rows = await query<{ data: WorkItem }>(
-    "SELECT data FROM projects ORDER BY sort_order ASC, id ASC"
-  );
-  return rows.map((r) => r.data);
+  try {
+    const rows = await query<{ data: WorkItem }>(
+      "SELECT data FROM projects ORDER BY sort_order ASC, id ASC"
+    );
+    if (rows.length > 0) {
+      return rows.map((r) => r.data);
+    }
+  } catch (err) {
+    console.warn("[projectsStore] Could not read projects from database, using fallback data:", err);
+  }
+  return defaultProjects as unknown as WorkItem[];
 }
 
 export async function getProject(slug: string): Promise<WorkItem | undefined> {
-  const rows = await query<{ data: WorkItem }>(
-    "SELECT data FROM projects WHERE slug = $1",
-    [slug]
-  );
-  return rows[0]?.data;
+  try {
+    const rows = await query<{ data: WorkItem }>(
+      "SELECT data FROM projects WHERE slug = $1",
+      [slug]
+    );
+    if (rows.length > 0 && rows[0]?.data) {
+      return rows[0].data;
+    }
+  } catch (err) {
+    console.warn(`[projectsStore] Could not read project "${slug}" from database, using fallback data:`, err);
+  }
+  return (defaultProjects as unknown as WorkItem[]).find((p) => p.slug === slug);
 }
 
 function slugify(input: string): string {
