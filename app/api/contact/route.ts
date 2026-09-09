@@ -5,11 +5,11 @@ export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, message } = await req.json();
+    const { name, email, phone, service, budget, message } = await req.json();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !message || !service || !budget) {
       return NextResponse.json(
-        { error: "Name, email and message are all required." },
+        { error: "Name, email, service, budget and message are all required." },
         { status: 400 }
       );
     }
@@ -35,12 +35,29 @@ export async function POST(req: Request) {
 
     const resend = new Resend(apiKey);
 
+    const emailBody = [
+      `New enquiry from ${name}`,
+      ``,
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+      `Name:     ${name}`,
+      `Email:    ${email}`,
+      phone ? `Mobile:   ${phone}` : null,
+      `Service:  ${service}`,
+      `Budget:   ${budget}`,
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+      ``,
+      `Message:`,
+      message,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+
     const { data, error } = await resend.emails.send({
       from: fromAddress,
       to: toEmail,
       replyTo: email,
-      subject: `New enquiry from ${name}`,
-      text: `From: ${name} <${email}>\n\n${message}`,
+      subject: `New enquiry from ${name} — ${service}`,
+      text: emailBody,
     });
 
     if (error) {
