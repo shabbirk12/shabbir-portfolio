@@ -6,7 +6,13 @@ import DotPortrait from "@/components/DotPortrait";
 import Reveal from "@/components/Reveal";
 import type { AboutDetailItem } from "@/lib/contentStore";
 
-export default function About({ aboutDetails }: { aboutDetails: AboutDetailItem[] }) {
+export default function About({
+  aboutDetails,
+  avatarUrl,
+}: {
+  aboutDetails: AboutDetailItem[];
+  avatarUrl?: string | null;
+}) {
   return (
     <section id="about" className="px-6 md:px-10 py-24 md:py-32">
       <Reveal className="mb-14">
@@ -42,7 +48,7 @@ export default function About({ aboutDetails }: { aboutDetails: AboutDetailItem[
           <span className="corner-bracket top-3 right-3 border-t border-r" />
           <span className="corner-bracket bottom-3 left-3 border-b border-l" />
           <span className="corner-bracket bottom-3 right-3 border-b border-r" />
-          <DotPortrait src="/images/profile.jpg" className="h-full w-full" />
+          <DotPortrait src={avatarUrl || "/images/profile.jpg"} className="h-full w-full" />
         </motion.div>
       </div>
 

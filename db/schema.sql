@@ -26,11 +26,12 @@ CREATE TABLE IF NOT EXISTS site_settings (
   id INTEGER PRIMARY KEY DEFAULT 1,
   title TEXT NOT NULL DEFAULT 'Shabbir Khan — Graphic Designer & Web Developer',
   logo_url TEXT,
+  avatar_url TEXT,
   CONSTRAINT single_row CHECK (id = 1)
 );
 
-INSERT INTO site_settings (id, title, logo_url)
-VALUES (1, 'Shabbir Khan — Graphic Designer & Web Developer', NULL)
+INSERT INTO site_settings (id, title, logo_url, avatar_url)
+VALUES (1, 'Shabbir Khan — Graphic Designer & Web Developer', NULL, NULL)
 ON CONFLICT (id) DO NOTHING;
 
 -- Projects: the full case-study object is stored as JSONB. This mirrors the

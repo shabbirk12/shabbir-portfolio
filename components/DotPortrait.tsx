@@ -79,6 +79,7 @@ export default function DotPortrait({
     let mouseY = -1000;
 
     const img = new Image();
+    img.crossOrigin = "anonymous";
     img.src = src;
 
     const build = () => {
@@ -117,22 +118,26 @@ export default function DotPortrait({
       sctx.filter = "grayscale(1) contrast(1.1)";
       sctx.drawImage(img, offX, offY, drawW, drawH);
 
-      const data = sctx.getImageData(0, 0, sample.width, sample.height).data;
+      try {
+        const data = sctx.getImageData(0, 0, sample.width, sample.height).data;
 
-      particles = [];
-      for (let y = 0; y < sample.height; y += step) {
-        for (let x = 0; x < sample.width; x += step) {
-          const i = (y * sample.width + x) * 4;
-          const r = data[i];
-          const a = data[i + 3];
-          if (a < 40) continue;
-          const brightness = r / 255;
-          const size = 0.6 + brightness * 1.6;
-          const alpha = 0.25 + brightness * 0.75;
-          particles.push(
-            new DotParticle(x, y, size, `rgba(${dotColor}, ${alpha.toFixed(2)})`)
-          );
+        particles = [];
+        for (let y = 0; y < sample.height; y += step) {
+          for (let x = 0; x < sample.width; x += step) {
+            const i = (y * sample.width + x) * 4;
+            const r = data[i];
+            const a = data[i + 3];
+            if (a < 40) continue;
+            const brightness = r / 255;
+            const size = 0.6 + brightness * 1.6;
+            const alpha = 0.25 + brightness * 0.75;
+            particles.push(
+              new DotParticle(x, y, size, `rgba(${dotColor}, ${alpha.toFixed(2)})`)
+            );
+          }
         }
+      } catch (err) {
+        console.warn("DotPortrait cross-origin pixel reading prevented:", err);
       }
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

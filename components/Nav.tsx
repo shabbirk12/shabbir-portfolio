@@ -34,6 +34,53 @@ export default function Nav() {
       .catch(() => {});
   }, []);
 
+  // Strip any initial hash from URL on mount and intercept all hash links
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const id = window.location.hash.replace("#", "");
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 100);
+      }
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+
+    const handleGlobalClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest("a");
+      if (!target) return;
+      const href = target.getAttribute("href");
+      if (href && (href.startsWith("/#") || href.startsWith("#"))) {
+        const id = href.replace(/^\/?#/, "");
+        if (id === "top") {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.history.replaceState(null, "", window.location.pathname);
+          return;
+        }
+        const el = document.getElementById(id);
+        if (el && window.location.pathname === "/") {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: "smooth" });
+          window.history.replaceState(null, "", "/");
+        }
+      }
+    };
+
+    document.addEventListener("click", handleGlobalClick);
+    return () => document.removeEventListener("click", handleGlobalClick);
+  }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (typeof window !== "undefined" && window.location.pathname === "/") {
+      e.preventDefault();
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+        window.history.replaceState(null, "", "/");
+      }
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 md:px-10 py-5 transition-colors duration-300 ${
@@ -62,6 +109,7 @@ export default function Nav() {
             <a
               key={l.n}
               href={l.href}
+              onClick={(e) => handleNavClick(e, l.id)}
               className={`underline-sweep transition-colors ${
                 isActive ? "text-lime" : "hover:text-lime"
               }`}
@@ -74,6 +122,7 @@ export default function Nav() {
         })}
         <a
           href="/#contact"
+          onClick={(e) => handleNavClick(e, "contact")}
           className="rounded-full bg-lime text-lime-ink px-5 py-2 font-mono text-[0.65rem] tracking-widest2
                      hover:shadow-glow-lime transition-shadow"
         >
@@ -103,7 +152,10 @@ export default function Nav() {
               <a
                 key={l.n}
                 href={l.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  setOpen(false);
+                  handleNavClick(e, l.id);
+                }}
                 className="font-mono text-sm tracking-widest2 text-muted hover:text-lime"
               >
                 {l.n}/{l.label}
@@ -111,7 +163,10 @@ export default function Nav() {
             ))}
             <a
               href="/#contact"
-              onClick={() => setOpen(false)}
+              onClick={(e) => {
+                setOpen(false);
+                handleNavClick(e, "contact");
+              }}
               className="rounded-full bg-lime text-lime-ink px-5 py-3 text-center font-mono text-xs tracking-widest2"
             >
               GET IN TOUCH

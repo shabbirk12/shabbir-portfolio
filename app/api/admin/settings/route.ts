@@ -14,11 +14,21 @@ export async function PUT(req: Request) {
   if (!hasValidSession()) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
 
   try {
-    const { title } = await req.json();
-    if (typeof title !== "string" || title.trim().length === 0) {
-      return NextResponse.json({ error: "Title is required." }, { status: 400 });
+    const body = await req.json();
+    const { title, avatarUrl, logoUrl } = body;
+
+    const updates: Partial<{ title: string; avatarUrl: string | null; logoUrl: string | null }> = {};
+    if (typeof title === "string" && title.trim().length > 0) {
+      updates.title = title.trim();
     }
-    await updateSiteSettings({ title: title.trim() });
+    if (avatarUrl !== undefined) {
+      updates.avatarUrl = avatarUrl === "" ? null : avatarUrl;
+    }
+    if (logoUrl !== undefined) {
+      updates.logoUrl = logoUrl === "" ? null : logoUrl;
+    }
+
+    await updateSiteSettings(updates);
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Settings update error:", err);

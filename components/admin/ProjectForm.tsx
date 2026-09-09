@@ -62,6 +62,59 @@ export default function ProjectForm({
   const [slugTouched, setSlugTouched] = useState(mode === "edit");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploadingThumb, setUploadingThumb] = useState(false);
+  const [thumbMsg, setThumbMsg] = useState("");
+  const [uploadingGalleryIdx, setUploadingGalleryIdx] = useState<number | null>(null);
+
+  async function uploadFile(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/admin/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const json = await res.json();
+    if (!res.ok) {
+      throw new Error(json.error || "Upload failed.");
+    }
+    return json.url;
+  }
+
+  async function onThumbChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingThumb(true);
+    setThumbMsg("");
+    try {
+      const url = await uploadFile(file);
+      set("image", url);
+      setThumbMsg("Thumbnail uploaded successfully!");
+    } catch (err: any) {
+      setThumbMsg(err.message || "Upload failed.");
+    } finally {
+      setUploadingThumb(false);
+      e.target.value = "";
+    }
+  }
+
+  async function onGalleryChange(idx: number, e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingGalleryIdx(idx);
+    try {
+      const url = await uploadFile(file);
+      const next = [...item.caseStudy.gallery];
+      next[idx] = { ...next[idx], image: url };
+      setCS("gallery", next);
+    } catch (err: any) {
+      alert(err.message || "Upload failed.");
+    } finally {
+      setUploadingGalleryIdx(null);
+      e.target.value = "";
+    }
+  }
 
   function set<K extends keyof WorkItem>(key: K, value: WorkItem[K]) {
     setItem((prev) => ({ ...prev, [key]: value }));
@@ -190,17 +243,41 @@ export default function ProjectForm({
       </div>
 
       <div className={fieldWrap}>
-        <span className={labelClass}>IMAGE URL</span>
+        <div className="flex items-center justify-between">
+          <span className={labelClass}>PROJECT THUMBNAIL</span>
+          <label className="font-mono text-[0.65rem] tracking-widest2 text-mint hover:underline cursor-pointer">
+            {uploadingThumb ? "UPLOADING…" : "+ UPLOAD NEW THUMBNAIL"}
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
+              onChange={onThumbChange}
+              disabled={uploadingThumb}
+              className="hidden"
+            />
+          </label>
+        </div>
+
+        {item.image && (
+          <div className="relative w-56 h-36 border border-line bg-surface overflow-hidden rounded my-1">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={item.image}
+              alt="Project thumbnail preview"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
+
         <input
           required
           value={item.image}
           onChange={(e) => set("image", e.target.value)}
-          placeholder="https://images.unsplash.com/photo-..."
+          placeholder="https://... or click upload above"
           className={inputClass}
         />
+        {thumbMsg && <p className="font-mono text-xs text-mint">{thumbMsg}</p>}
         <p className="text-muted text-xs">
-          Any full https:// image URL. If it's not from images.unsplash.com, add its domain to{" "}
-          <code>next.config.js</code> → <code>images.remotePatterns</code>.
+          Upload an image from your computer, or paste any image URL.
         </p>
       </div>
 
@@ -290,30 +367,57 @@ export default function ProjectForm({
 
       <div className={fieldWrap}>
         <span className={labelClass}>GALLERY (3 images)</span>
-        {item.caseStudy.gallery.map((g, i) => (
-          <div key={i} className="grid grid-cols-2 gap-4 mb-2">
-            <input
-              placeholder="Caption"
-              value={g.label}
-              onChange={(e) => {
-                const next = [...item.caseStudy.gallery];
-                next[i] = { ...next[i], label: e.target.value };
-                setCS("gallery", next);
-              }}
-              className={inputClass}
-            />
-            <input
-              placeholder="Image URL"
-              value={g.image}
-              onChange={(e) => {
-                const next = [...item.caseStudy.gallery];
-                next[i] = { ...next[i], image: e.target.value };
-                setCS("gallery", next);
-              }}
-              className={inputClass}
-            />
-          </div>
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+          {item.caseStudy.gallery.map((g, i) => (
+            <div key={i} className="flex flex-col gap-2 p-3 border border-line/60 rounded bg-ink/40">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[0.65rem] text-muted tracking-widest2">FRAME 0{i + 1}</span>
+                <label className="font-mono text-[0.65rem] tracking-widest2 text-mint hover:underline cursor-pointer">
+                  {uploadingGalleryIdx === i ? "UPLOADING…" : "+ UPLOAD"}
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
+                    onChange={(e) => onGalleryChange(i, e)}
+                    disabled={uploadingGalleryIdx === i}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              {g.image && (
+                <div className="relative w-full h-24 border border-line bg-surface overflow-hidden rounded">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={g.image}
+                    alt={g.label || `Frame ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              <input
+                placeholder="Caption (e.g. Identity System)"
+                value={g.label}
+                onChange={(e) => {
+                  const next = [...item.caseStudy.gallery];
+                  next[i] = { ...next[i], label: e.target.value };
+                  setCS("gallery", next);
+                }}
+                className={inputClass}
+              />
+              <input
+                placeholder="Image URL"
+                value={g.image}
+                onChange={(e) => {
+                  const next = [...item.caseStudy.gallery];
+                  next[i] = { ...next[i], image: e.target.value };
+                  setCS("gallery", next);
+                }}
+                className={inputClass}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className={fieldWrap}>

@@ -19,7 +19,11 @@ export default async function AdminSettingsPage() {
       <p className="font-mono text-[0.65rem] tracking-widest2 text-lime mb-2 mt-6">ADMIN</p>
       <h1 className="font-display text-3xl uppercase text-paper mb-10">Site Settings</h1>
 
-      <SettingsForm initialTitle={settings.title} initialLogoUrl={settings.logoUrl} />
+      <SettingsForm
+        initialTitle={settings.title}
+        initialLogoUrl={settings.logoUrl}
+        initialAvatarUrl={settings.avatarUrl}
+      />
     </main>
   );
 }
