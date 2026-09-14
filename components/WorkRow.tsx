@@ -63,6 +63,19 @@ export default function WorkRow({ item, delay }: { item: WorkItem; delay: number
               {item.title}
             </h3>
             <p className="text-muted text-sm md:text-base max-w-md truncate">{item.summary}</p>
+
+            {/* Permanent thumbnail on mobile screen (Image 03) */}
+            {item.image && (
+              <div className="block md:hidden relative w-full aspect-[16/10] mt-4 rounded border border-line overflow-hidden">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  className="object-cover"
+                />
+              </div>
+            )}
           </div>
 
           {/* Right: two-line category meta with a thin separator — indents leftward on hover */}

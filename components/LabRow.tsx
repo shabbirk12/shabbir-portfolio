@@ -30,13 +30,13 @@ export default function LabRow({
       }}
       className="section-frame relative flex flex-col gap-6 overflow-hidden border border-line p-7 transition-[border-color] duration-300 hover:border-mint md:flex-row md:items-center"
     >
-      {/* Directional fill: sweeps in from the left, retreats to the right */}
+      {/* Directional fill: sweeps in from left to right, retreats right to left on mouse leave */}
       <motion.div
         aria-hidden="true"
         initial={false}
         animate={{ scaleX: hovered ? 1 : 0 }}
-        transition={{ type: "spring", stiffness: 220, damping: 26, mass: 0.7 }}
-        style={{ transformOrigin: hovered ? "left" : "right" }}
+        transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+        style={{ transformOrigin: "left" }}
         className="absolute inset-0 bg-mint"
       />
 

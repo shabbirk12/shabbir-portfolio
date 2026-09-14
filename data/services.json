@@ -2,26 +2,31 @@
   {
     "index": "01",
     "title": "Brand & Identity",
-    "detail": "Logos, mark systems and guidelines built to survive a print run and a favicon."
+    "detail": "Logos, mark systems and guidelines built to survive a print run and a favicon.",
+    "image": "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=900&auto=format&fit=crop"
   },
   {
     "index": "02",
     "title": "Web Development",
-    "detail": "Booking engines, client portals and full-stack products — Next.js, React and real APIs."
+    "detail": "Booking engines, client portals and full-stack products — Next.js, React and real APIs.",
+    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=900&auto=format&fit=crop"
   },
   {
     "index": "03",
     "title": "Codeless Web Builds",
-    "detail": "WordPress and Squarespace sites for clients who need to self-edit after launch."
+    "detail": "WordPress and Squarespace sites for clients who need to self-edit after launch.",
+    "image": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=900&auto=format&fit=crop"
   },
   {
     "index": "04",
     "title": "Menu & Print",
-    "detail": "Restaurant and bar menus, packaging and collateral — legible first, decorative second."
+    "detail": "Restaurant and bar menus, packaging and collateral — legible first, decorative second.",
+    "image": "https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=900&auto=format&fit=crop"
   },
   {
     "index": "05",
     "title": "Event Identity",
-    "detail": "Campaign identity and key art for club nights, festivals and one-off events."
+    "detail": "Campaign identity and key art for club nights, festivals and one-off events.",
+    "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=900&auto=format&fit=crop"
   }
 ]

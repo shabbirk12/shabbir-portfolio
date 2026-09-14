@@ -23,6 +23,10 @@ export default async function AdminSettingsPage() {
         initialTitle={settings.title}
         initialLogoUrl={settings.logoUrl}
         initialAvatarUrl={settings.avatarUrl}
+        initialPrimaryColor={settings.primaryColor}
+        initialSecondaryColor={settings.secondaryColor}
+        initialBgColor={settings.bgColor}
+        initialTextColor={settings.textColor}
       />
     </main>
   );

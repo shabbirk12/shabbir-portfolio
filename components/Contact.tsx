@@ -97,7 +97,7 @@ const BUDGETS = [
 ];
 
 const selectClass =
-  "bg-ink border-b border-line py-3 text-paper placeholder:text-muted/50 focus:border-lime focus-visible:outline-none outline-none transition-colors appearance-none cursor-pointer w-full";
+  "bg-transparent border-b border-line py-3 text-paper placeholder:text-muted/50 focus:border-lime focus-visible:outline-none outline-none transition-colors appearance-none cursor-pointer w-full";
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -248,11 +248,11 @@ export default function Contact() {
               <select
                 value={dialCode}
                 onChange={(e) => setDialCode(e.target.value)}
-                className="bg-ink text-paper py-3 pr-2 focus-visible:outline-none outline-none cursor-pointer text-sm shrink-0"
+                className="bg-transparent text-paper py-3 pr-2 focus-visible:outline-none outline-none cursor-pointer text-sm shrink-0"
                 aria-label="Country code"
               >
                 {COUNTRY_CODES.map((c) => (
-                  <option key={c.code} value={c.dial}>
+                  <option key={c.code} value={c.dial} className="bg-ink text-paper">
                     {c.code} {c.dial}
                   </option>
                 ))}
@@ -276,9 +276,9 @@ export default function Contact() {
                 defaultValue=""
                 className={selectClass}
               >
-                <option value="" disabled>Select a service…</option>
+                <option value="" disabled className="bg-ink text-paper">Select a service…</option>
                 {SERVICES.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s} className="bg-ink text-paper">{s}</option>
                 ))}
               </select>
               <span className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-muted text-xs">▾</span>
@@ -295,9 +295,9 @@ export default function Contact() {
                 defaultValue=""
                 className={selectClass}
               >
-                <option value="" disabled>Select your budget…</option>
+                <option value="" disabled className="bg-ink text-paper">Select your budget…</option>
                 {BUDGETS.map((b) => (
-                  <option key={b} value={b}>{b}</option>
+                  <option key={b} value={b} className="bg-ink text-paper">{b}</option>
                 ))}
               </select>
               <span className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-muted text-xs">▾</span>

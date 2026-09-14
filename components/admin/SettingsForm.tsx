@@ -1,26 +1,81 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+
+const PRESETS = [
+  {
+    name: "Cyberpunk Lime (Default)",
+    primary: "#c6ff3d",
+    secondary: "#c3fffc",
+    bg: "#0a0a0a",
+    text: "#f2f1ed",
+  },
+  {
+    name: "Electric Blue & Violet",
+    primary: "#00f0ff",
+    secondary: "#a78bfa",
+    bg: "#050814",
+    text: "#f0f4ff",
+  },
+  {
+    name: "Sunset Ember & Amber",
+    primary: "#ff5722",
+    secondary: "#ffc107",
+    bg: "#0e0b0a",
+    text: "#fdf6f0",
+  },
+  {
+    name: "Emerald Matrix",
+    primary: "#10b981",
+    secondary: "#6ee7b7",
+    bg: "#05130d",
+    text: "#f0fdf4",
+  },
+  {
+    name: "Monochrome Studio",
+    primary: "#ffffff",
+    secondary: "#a1a1aa",
+    bg: "#000000",
+    text: "#f4f4f5",
+  },
+];
 
 export default function SettingsForm({
   initialTitle,
   initialLogoUrl,
   initialAvatarUrl,
+  initialPrimaryColor,
+  initialSecondaryColor,
+  initialBgColor,
+  initialTextColor,
 }: {
   initialTitle: string;
   initialLogoUrl: string | null;
   initialAvatarUrl: string | null;
+  initialPrimaryColor?: string | null;
+  initialSecondaryColor?: string | null;
+  initialBgColor?: string | null;
+  initialTextColor?: string | null;
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [logoUrl, setLogoUrl] = useState(initialLogoUrl);
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl);
+
+  // Theme colors state
+  const [primaryColor, setPrimaryColor] = useState(initialPrimaryColor || "#c6ff3d");
+  const [secondaryColor, setSecondaryColor] = useState(initialSecondaryColor || "#c3fffc");
+  const [bgColor, setBgColor] = useState(initialBgColor || "#0a0a0a");
+  const [textColor, setTextColor] = useState(initialTextColor || "#f2f1ed");
+
   const [savingTitle, setSavingTitle] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [savingColors, setSavingColors] = useState(false);
+
   const [titleMsg, setTitleMsg] = useState("");
   const [logoMsg, setLogoMsg] = useState("");
   const [avatarMsg, setAvatarMsg] = useState("");
+  const [colorMsg, setColorMsg] = useState("");
 
   async function saveTitle() {
     setSavingTitle(true);
@@ -55,7 +110,6 @@ export default function SettingsForm({
         setLogoMsg(json.error || "Upload failed.");
         return;
       }
-      // Save logo to site_settings
       await fetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -86,7 +140,6 @@ export default function SettingsForm({
         setAvatarMsg(json.error || "Upload failed.");
         return;
       }
-      // Save avatar to site_settings
       await fetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -117,8 +170,43 @@ export default function SettingsForm({
     }
   }
 
+  async function saveColors() {
+    setSavingColors(true);
+    setColorMsg("");
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          primaryColor,
+          secondaryColor,
+          bgColor,
+          textColor,
+        }),
+      });
+      const json = await res.json();
+      setColorMsg(res.ok ? "Theme colors updated! Live across entire site." : json.error || "Failed to save.");
+    } catch {
+      setColorMsg("Network error.");
+    } finally {
+      setSavingColors(false);
+    }
+  }
+
+  function applyPreset(preset: typeof PRESETS[number]) {
+    setPrimaryColor(preset.primary);
+    setSecondaryColor(preset.secondary);
+    setBgColor(preset.bg);
+    setTextColor(preset.text);
+    setColorMsg(`Selected preset: "${preset.name}". Click SAVE COLORS to apply.`);
+  }
+
+  async function resetColors() {
+    applyPreset(PRESETS[0]);
+  }
+
   return (
-    <div className="max-w-xl flex flex-col gap-12">
+    <div className="max-w-xl flex flex-col gap-14">
       {/* SITE TITLE */}
       <div>
         <p className="font-mono text-xs tracking-widest2 text-muted mb-3">SITE TITLE</p>
@@ -144,8 +232,158 @@ export default function SettingsForm({
         </div>
       </div>
 
+      {/* THEME COLORS (New requested feature) */}
+      <div className="border-t border-line pt-8">
+        <p className="font-mono text-xs tracking-widest2 text-lime mb-2">WEBSITE THEME COLORS</p>
+        <p className="text-muted text-xs mb-6">
+          Customize the accent colors, text, and background across your entire portfolio in real time.
+        </p>
+
+        {/* Presets */}
+        <div className="mb-6">
+          <span className="font-mono text-[0.65rem] tracking-widest2 text-muted block mb-3">QUICK PRESETS</span>
+          <div className="flex flex-wrap gap-2">
+            {PRESETS.map((p) => (
+              <button
+                key={p.name}
+                type="button"
+                onClick={() => applyPreset(p)}
+                className="flex items-center gap-2 border border-line px-3 py-1.5 rounded-full text-xs font-mono hover:border-lime transition-colors text-muted hover:text-paper"
+              >
+                <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: p.primary }} />
+                {p.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Color pickers grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+          {/* Primary Accent */}
+          <div className="flex flex-col gap-2 p-3 border border-line rounded">
+            <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
+              PRIMARY ACCENT (Buttons, Let&apos;s talk glow)
+            </span>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={primaryColor}
+                onChange={(e) => setPrimaryColor(e.target.value)}
+                className="w-9 h-9 rounded cursor-pointer border border-line bg-transparent p-0.5"
+              />
+              <input
+                type="text"
+                value={primaryColor}
+                onChange={(e) => setPrimaryColor(e.target.value)}
+                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-28 uppercase focus-visible:outline-none focus:border-lime"
+              />
+            </div>
+          </div>
+
+          {/* Secondary Accent */}
+          <div className="flex flex-col gap-2 p-3 border border-line rounded">
+            <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
+              SECONDARY ACCENT (01, 02 numbers, Lab cards)
+            </span>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={secondaryColor}
+                onChange={(e) => setSecondaryColor(e.target.value)}
+                className="w-9 h-9 rounded cursor-pointer border border-line bg-transparent p-0.5"
+              />
+              <input
+                type="text"
+                value={secondaryColor}
+                onChange={(e) => setSecondaryColor(e.target.value)}
+                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-28 uppercase focus-visible:outline-none focus:border-lime"
+              />
+            </div>
+          </div>
+
+          {/* Background Canvas */}
+          <div className="flex flex-col gap-2 p-3 border border-line rounded">
+            <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
+              BACKGROUND (Dark canvas)
+            </span>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={bgColor}
+                onChange={(e) => setBgColor(e.target.value)}
+                className="w-9 h-9 rounded cursor-pointer border border-line bg-transparent p-0.5"
+              />
+              <input
+                type="text"
+                value={bgColor}
+                onChange={(e) => setBgColor(e.target.value)}
+                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-28 uppercase focus-visible:outline-none focus:border-lime"
+              />
+            </div>
+          </div>
+
+          {/* Text Color */}
+          <div className="flex flex-col gap-2 p-3 border border-line rounded">
+            <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
+              TEXT COLOR (Headings &amp; body)
+            </span>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={textColor}
+                onChange={(e) => setTextColor(e.target.value)}
+                className="w-9 h-9 rounded cursor-pointer border border-line bg-transparent p-0.5"
+              />
+              <input
+                type="text"
+                value={textColor}
+                onChange={(e) => setTextColor(e.target.value)}
+                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-28 uppercase focus-visible:outline-none focus:border-lime"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Live Mini Preview */}
+        <div
+          className="p-4 rounded border border-line mb-6 flex items-center justify-between"
+          style={{ backgroundColor: bgColor, color: textColor }}
+        >
+          <div>
+            <span className="font-mono text-xs mr-2" style={{ color: secondaryColor }}>01 /</span>
+            <span className="font-display uppercase text-sm font-semibold">Live Preview Text</span>
+          </div>
+          <button
+            type="button"
+            className="px-3 py-1 rounded-full font-mono text-[0.65rem] tracking-widest2"
+            style={{ backgroundColor: primaryColor, color: bgColor }}
+          >
+            ACTION BUTTON
+          </button>
+        </div>
+
+        <div className="flex items-center gap-4 flex-wrap">
+          <button
+            type="button"
+            onClick={saveColors}
+            disabled={savingColors}
+            className="rounded-full bg-lime text-lime-ink px-6 py-2.5 font-mono text-xs tracking-widest2 disabled:opacity-50"
+          >
+            {savingColors ? "SAVING…" : "SAVE COLORS"}
+          </button>
+          <button
+            type="button"
+            onClick={resetColors}
+            className="border border-line px-4 py-2.5 font-mono text-xs tracking-widest2 text-muted hover:text-paper transition-colors"
+          >
+            RESET TO ORIGINAL
+          </button>
+          {colorMsg && <span className="font-mono text-xs text-lime block w-full mt-1">{colorMsg}</span>}
+        </div>
+      </div>
+
       {/* LOGO */}
-      <div>
+      <div className="border-t border-line pt-8">
         <p className="font-mono text-xs tracking-widest2 text-muted mb-3">LOGO</p>
         <p className="text-muted text-xs mb-4">
           PNG, JPEG, WebP, or SVG — 5MB max. Replaces the &ldquo;S&rdquo; badge in the nav.

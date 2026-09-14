@@ -26,14 +26,24 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
+
+  const themeVariables = [
+    settings.primaryColor ? `--color-lime: ${settings.primaryColor};` : null,
+    settings.secondaryColor ? `--color-mint: ${settings.secondaryColor};` : null,
+    settings.bgColor ? `--color-ink: ${settings.bgColor};` : null,
+    settings.textColor ? `--color-paper: ${settings.textColor};` : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <html lang="en">
       <head>
-        {/* General Sans (display) + Switzer (body) via Fontshare — closest free match
-            to the reference site's grotesk. Loaded at runtime, not bundled at build. */}
-        
-        
+        {themeVariables && (
+          <style dangerouslySetInnerHTML={{ __html: `:root { ${themeVariables} }` }} />
+        )}
       </head>
       <body className="font-body bg-ink text-paper antialiased">
         <div className="grain-overlay bg-grain" aria-hidden="true" />

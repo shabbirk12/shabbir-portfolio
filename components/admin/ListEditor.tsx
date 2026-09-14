@@ -33,6 +33,26 @@ export default function ListEditor({
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [saveError, setSaveError] = useState("");
   const savedTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [uploadingIdx, setUploadingIdx] = useState<number | null>(null);
+
+  async function handleImageUpload(i: number, key: string, file: File) {
+    setUploadingIdx(i);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Upload failed.");
+      updateRowLocal(i, key, json.url);
+    } catch (err: any) {
+      alert(err.message || "Failed to upload image.");
+    } finally {
+      setUploadingIdx(null);
+    }
+  }
 
   const activeFields: Field[] = isStringArray ? [{ key: "value", label: title }] : fields;
 
@@ -219,7 +239,42 @@ export default function ListEditor({
                     {f.label.toUpperCase()}
                     {arrayFields.includes(f.key) && " (comma-separated)"}
                   </span>
-                  {f.multiline ? (
+                  {f.key === "image" ? (
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <label className="font-mono text-[0.65rem] tracking-widest2 text-mint hover:underline cursor-pointer">
+                          {uploadingIdx === i ? "UPLOADING…" : "+ UPLOAD IMAGE"}
+                          <input
+                            type="file"
+                            accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleImageUpload(i, f.key, file);
+                              e.target.value = "";
+                            }}
+                            disabled={uploadingIdx === i}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                      {row[f.key] && (
+                        <div className="relative h-14 w-36 border border-line bg-surface rounded overflow-hidden">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={row[f.key]}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <input
+                        placeholder="Image URL or click upload above"
+                        value={row[f.key] ?? ""}
+                        onChange={(e) => updateRowLocal(i, f.key, e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                  ) : f.multiline ? (
                     <textarea
                       rows={2}
                       value={row[f.key] ?? ""}

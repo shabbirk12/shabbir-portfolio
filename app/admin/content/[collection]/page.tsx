@@ -21,6 +21,7 @@ const CONFIG: Record<
       { key: "index", label: "Index (e.g. 01)" },
       { key: "title", label: "Title" },
       { key: "detail", label: "Detail", multiline: true },
+      { key: "image", label: "Thumbnail Image" },
     ],
   },
   lab: {

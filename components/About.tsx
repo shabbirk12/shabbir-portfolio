@@ -80,7 +80,7 @@ export default function About({
             <li key={e.role} className="border-b border-line py-4">
               <a
                 href="#work"
-                className="underline-sweep flex items-baseline justify-between gap-4 group"
+                className="flex items-baseline justify-between gap-4 group"
               >
                 <div className="transition-transform duration-300 group-hover:translate-x-4">
                   <p className="font-display uppercase text-sm md:text-base group-hover:text-mint transition-colors">

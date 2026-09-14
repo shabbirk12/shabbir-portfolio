@@ -55,8 +55,7 @@ export async function writeCollection(name: Collection, data: unknown): Promise<
   );
 }
 
-// Typed convenience getters used by the site's server components.
-export type ServiceItem = { index: string; title: string; detail: string };
+export type ServiceItem = { index: string; title: string; detail: string; image?: string };
 export type LabItem = { index: string; tags: string[]; title: string; detail: string; link: string };
 export type StatItem = { value: string; label: string };
 export type AboutDetailItem = { label: string; value: string };

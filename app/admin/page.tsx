@@ -85,7 +85,7 @@ export default async function AdminDashboard() {
             { href: "/admin/content/toolkit/edit", label: "Toolkit", desc: "Design / Engineering columns" },
             { href: "/admin/content/stats", label: "Stats", desc: "The 4 big numbers below About" },
             { href: "/admin/content/about-details", label: "About Details", desc: "Role / Status / Focus rows" },
-            { href: "/admin/settings", label: "Site Settings", desc: "Title, logo, and About profile picture" },
+            { href: "/admin/settings", label: "Site Settings", desc: "Colors, title, logo, and profile picture" },
           ].map((c) => (
             <Link
               key={c.href}

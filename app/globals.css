@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-ink: #0a0a0a;
+  --color-surface: #131313;
+  --color-surface2: #1a1a1a;
+  --color-line: #242424;
+  --color-paper: #f2f1ed;
+  --color-muted: #8f9490;
+  --color-mint: #c3fffc;
+  --color-mint-ink: #06201f;
+  --color-lime: #c6ff3d;
+  --color-lime-ink: #1c2600;
+  --color-teal: #0f3d38;
+}
+
 @layer base {
   .font-display {
     font-weight: 600;
