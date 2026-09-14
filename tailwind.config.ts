@@ -5,17 +5,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "var(--color-ink, #0a0a0a)",
-        surface: "var(--color-surface, #131313)",
-        surface2: "var(--color-surface2, #1a1a1a)",
-        line: "var(--color-line, #242424)",
-        paper: "var(--color-paper, #f2f1ed)",
-        muted: "var(--color-muted, #8f9490)",
-        mint: "var(--color-mint, #c3fffc)",
-        "mint-ink": "var(--color-mint-ink, #06201f)",
-        lime: "var(--color-lime, #c6ff3d)",
-        "lime-ink": "var(--color-lime-ink, #1c2600)",
-        teal: "var(--color-teal, #0f3d38)",
+        ink: "#0a0a0a",
+        surface: "#131313",
+        surface2: "#1a1a1a",
+        line: "#242424",
+        paper: "#f2f1ed",
+        muted: "#8f9490",
+        mint: "#c3fffc",
+        "mint-ink": "#06201f",
+        lime: "#c6ff3d",
+        "lime-ink": "#1c2600",
+        teal: "#0f3d38",
       },
       fontFamily: {
         display: ["General Sans", "sans-serif"],

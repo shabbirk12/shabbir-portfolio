@@ -29,23 +29,29 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings();
 
-  const themeVariables = [
-    settings.primaryColor ? `--color-lime: ${settings.primaryColor};` : null,
-    settings.secondaryColor ? `--color-mint: ${settings.secondaryColor};` : null,
-    settings.bgColor ? `--color-ink: ${settings.bgColor};` : null,
-    settings.textColor ? `--color-paper: ${settings.textColor};` : null,
+  const themeOverrides = [
+    settings.primaryColor
+      ? `.text-lime { color: ${settings.primaryColor} !important; } .bg-lime { background-color: ${settings.primaryColor} !important; } .border-lime { border-color: ${settings.primaryColor} !important; } :root { --color-lime: ${settings.primaryColor}; }`
+      : null,
+    settings.secondaryColor
+      ? `.text-mint { color: ${settings.secondaryColor} !important; } .bg-mint { background-color: ${settings.secondaryColor} !important; } .border-mint { border-color: ${settings.secondaryColor} !important; } :root { --color-mint: ${settings.secondaryColor}; }`
+      : null,
+    settings.bgColor
+      ? `body { background-color: ${settings.bgColor} !important; } :root { --color-ink: ${settings.bgColor}; }`
+      : null,
+    settings.textColor
+      ? `body { color: ${settings.textColor} !important; } :root { --color-paper: ${settings.textColor}; }`
+      : null,
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
     <html lang="en">
-      <head>
-        {themeVariables && (
-          <style dangerouslySetInnerHTML={{ __html: `:root { ${themeVariables} }` }} />
-        )}
-      </head>
       <body className="font-body bg-ink text-paper antialiased">
+        {themeOverrides && (
+          <style dangerouslySetInnerHTML={{ __html: themeOverrides }} />
+        )}
         <div className="grain-overlay bg-grain" aria-hidden="true" />
         <Spotlight />
         <CustomCursor />
