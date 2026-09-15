@@ -9,6 +9,7 @@ export type SiteSettings = {
   secondaryColor: string | null;
   bgColor: string | null;
   textColor: string | null;
+  accentGradient: string | null;
 };
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -19,6 +20,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   secondaryColor: null,
   bgColor: null,
   textColor: null,
+  accentGradient: null,
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -31,6 +33,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       secondary_color?: string | null;
       bg_color?: string | null;
       text_color?: string | null;
+      accent_gradient?: string | null;
     }>("SELECT * FROM site_settings WHERE id = 1");
 
     if (rows.length === 0) return DEFAULT_SETTINGS;
@@ -42,6 +45,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       secondaryColor: rows[0].secondary_color ?? null,
       bgColor: rows[0].bg_color ?? null,
       textColor: rows[0].text_color ?? null,
+      accentGradient: rows[0].accent_gradient ?? null,
     };
   } catch {
     return DEFAULT_SETTINGS;
@@ -57,10 +61,11 @@ export async function updateSiteSettings(settings: Partial<SiteSettings>): Promi
   const nextSecondary = settings.secondaryColor !== undefined ? settings.secondaryColor : current.secondaryColor;
   const nextBg = settings.bgColor !== undefined ? settings.bgColor : current.bgColor;
   const nextText = settings.textColor !== undefined ? settings.textColor : current.textColor;
+  const nextGradient = settings.accentGradient !== undefined ? settings.accentGradient : current.accentGradient;
 
   await query(
-    `INSERT INTO site_settings (id, title, logo_url, avatar_url, primary_color, secondary_color, bg_color, text_color)
-     VALUES (1, $1, $2, $3, $4, $5, $6, $7)
+    `INSERT INTO site_settings (id, title, logo_url, avatar_url, primary_color, secondary_color, bg_color, text_color, accent_gradient)
+     VALUES (1, $1, $2, $3, $4, $5, $6, $7, $8)
      ON CONFLICT (id) DO UPDATE SET
        title = $1,
        logo_url = $2,
@@ -68,7 +73,8 @@ export async function updateSiteSettings(settings: Partial<SiteSettings>): Promi
        primary_color = $4,
        secondary_color = $5,
        bg_color = $6,
-       text_color = $7`,
-    [nextTitle, nextLogo, nextAvatar, nextPrimary, nextSecondary, nextBg, nextText]
+       text_color = $7,
+       accent_gradient = $8`,
+    [nextTitle, nextLogo, nextAvatar, nextPrimary, nextSecondary, nextBg, nextText, nextGradient]
   );
 }

@@ -1,4 +1,5 @@
 @import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=switzer@400,500,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Caveat:wght@600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -11,11 +12,12 @@
   --color-line: #242424;
   --color-paper: #f2f1ed;
   --color-muted: #8f9490;
-  --color-mint: #c3fffc;
-  --color-mint-ink: #06201f;
   --color-lime: #c6ff3d;
   --color-lime-ink: #1c2600;
-  --color-teal: #0f3d38;
+  --color-mint: #c6ff3d;
+  --color-mint-ink: #1c2600;
+  --color-teal: #142805;
+  --font-script: "Instrument Serif", "Caveat", serif, cursive;
 }
 
 @layer base {
@@ -54,12 +56,12 @@ body {
 }
 
 ::selection {
-  background: #c3fffc;
+  background: #c6ff3d;
   color: #0a0a0a;
 }
 
 :focus-visible {
-  outline: 2px solid #c3fffc;
+  outline: 2px solid #c6ff3d;
   outline-offset: 3px;
 }
 
@@ -87,7 +89,7 @@ body {
   position: absolute;
   width: 16px;
   height: 16px;
-  border-color: #c3fffc;
+  border-color: #c6ff3d;
   opacity: 0.35;
   transition: opacity 0.25s ease, width 0.25s ease, height 0.25s ease;
 }
@@ -116,7 +118,7 @@ body {
 }
 
 .glow-text {
-  text-shadow: 0 0 24px rgba(195,255,252, 0.55);
+  text-shadow: 0 0 24px rgba(198,255,61, 0.55);
 }
 
 .card-glow {
@@ -124,8 +126,8 @@ body {
 }
 
 .card-glow:hover {
-  border-color: #c3fffc;
-  box-shadow: 0 0 60px -12px rgba(195,255,252, 0.45);
+  border-color: #c6ff3d;
+  box-shadow: 0 0 60px -12px rgba(198,255,61, 0.45);
   transform: translateY(-3px);
 }
 
@@ -136,9 +138,9 @@ body {
 }
 
 .fill-hover:hover {
-  background-color: #c3fffc;
-  border-color: #c3fffc;
-  color: #06201f;
+  background-color: #c6ff3d;
+  border-color: #c6ff3d;
+  color: #1c2600;
 }
 
 .fill-hover .fill-fade {
@@ -146,11 +148,11 @@ body {
 }
 
 .fill-hover:hover .fill-fade {
-  color: #06201f;
+  color: #1c2600;
 }
 
 .fill-hover:hover .fill-muted {
-  color: #1c3a37;
+  color: #2e3d05;
 }
 
 .ambient-blob {
@@ -158,7 +160,7 @@ body {
   border-radius: 9999px;
   filter: blur(100px);
   opacity: 0.7;
-  background: radial-gradient(circle, rgba(195,255,252, 0.22), rgba(15, 61, 56, 0.1) 60%, transparent 75%);
+  background: radial-gradient(circle, rgba(198,255,61, 0.18), rgba(20, 30, 5, 0.08) 60%, transparent 75%);
 }
 
 .underline-sweep {
@@ -172,7 +174,7 @@ body {
   bottom: -2px;
   width: 100%;
   height: 1px;
-  background: #c3fffc;
+  background: #c6ff3d;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;

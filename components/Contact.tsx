@@ -164,18 +164,20 @@ export default function Contact() {
         aria-hidden="true"
       />
 
+      {/* Section heading — centered */}
       <Reveal className="relative mb-4 text-center flex flex-col items-center">
         <p className="eyebrow mb-6">05 / OPEN FOR WORK · AVAILABLE FOR FREELANCE &amp; FULL-TIME</p>
         <h2 className="font-display text-5xl md:text-8xl uppercase leading-[0.95]">Got a project</h2>
         <h2 className="font-display text-5xl md:text-8xl uppercase leading-[0.95] flex flex-wrap items-baseline justify-center gap-x-4 md:gap-x-6">
           in mind?
-          <span className="font-script text-lime normal-case text-6xl md:text-9xl glow-text">
+          <span className="font-script text-lime normal-case text-6xl md:text-9xl glow-text italic">
             let&apos;s talk.
           </span>
         </h2>
       </Reveal>
 
-      <Reveal delay={0.1} className="relative mt-10 mb-16 text-center">
+      {/* Direct email link */}
+      <Reveal delay={0.1} className="relative mt-10 mb-14 text-center">
         <a
           href={`mailto:${profile.email}`}
           className="inline-flex items-center gap-3 font-display text-2xl md:text-4xl text-paper hover:text-lime transition-colors"
@@ -184,32 +186,8 @@ export default function Contact() {
         </a>
       </Reveal>
 
-      <div className="relative grid md:grid-cols-2 gap-16">
-        <Reveal delay={0.15}>
-          <div className="flex flex-col gap-4 font-mono text-sm tracking-widest2 mb-12">
-            <a
-              href={`https://${profile.linkedin}`}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-lime transition-colors"
-            >
-              LINKEDIN — {profile.linkedin} ↗
-            </a>
-            <a
-              href={`https://${profile.github}`}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-lime transition-colors"
-            >
-              GITHUB — {profile.github} ↗
-            </a>
-          </div>
-          <p className="text-muted text-sm max-w-sm leading-relaxed">
-            Based in {profile.location}. Usually replies within a day or two —
-            faster if there&apos;s an event date attached to it.
-          </p>
-        </Reveal>
-
+      {/* Centered form */}
+      <div className="relative max-w-2xl mx-auto">
         <motion.form
           onSubmit={onSubmit}
           initial={{ opacity: 0, y: 12 }}
@@ -316,21 +294,52 @@ export default function Contact() {
             />
           </label>
 
-          <button
-            type="submit"
-            disabled={status === "sending"}
-            className="self-start mt-2 rounded-full bg-lime px-6 py-3 font-mono text-xs tracking-widest2 text-lime-ink
-                       transition-transform hover:scale-105 hover:shadow-glow-lime disabled:opacity-50"
-          >
-            {status === "sending" ? "SENDING…" : "SEND ↗"}
-          </button>
+          {/* SEND button — centered */}
+          <div className="flex flex-col items-center gap-5 mt-2">
+            <button
+              type="submit"
+              disabled={status === "sending"}
+              className="rounded-full bg-lime px-8 py-3.5 font-mono text-xs tracking-widest2 text-lime-ink
+                         transition-transform hover:scale-105 hover:shadow-glow-lime disabled:opacity-50"
+            >
+              {status === "sending" ? "SENDING…" : "SEND MESSAGE ↗"}
+            </button>
 
-          {status === "sent" && (
-            <p className="font-mono text-xs text-lime">
-              Message sent — thanks, I&apos;ll be in touch.
-            </p>
-          )}
-          {status === "error" && <p className="font-mono text-xs text-red-400">{errorMsg}</p>}
+            {status === "sent" && (
+              <p className="font-mono text-xs text-lime">
+                Message sent — thanks, I&apos;ll be in touch.
+              </p>
+            )}
+            {status === "error" && <p className="font-mono text-xs text-red-400">{errorMsg}</p>}
+
+            {/* Social handles — below SEND button, centered */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 font-mono text-sm tracking-widest2 mt-2 pt-4 border-t border-line w-full justify-center">
+              <a
+                href={`https://${profile.linkedin}`}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-lime transition-colors text-muted"
+              >
+                LINKEDIN ↗
+              </a>
+              <span className="hidden sm:block text-line">·</span>
+              <a
+                href={`https://${profile.github}`}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-lime transition-colors text-muted"
+              >
+                GITHUB ↗
+              </a>
+              <span className="hidden sm:block text-line">·</span>
+              <a
+                href={`mailto:${profile.email}`}
+                className="hover:text-lime transition-colors text-muted"
+              >
+                EMAIL ↗
+              </a>
+            </div>
+          </div>
         </motion.form>
       </div>
 

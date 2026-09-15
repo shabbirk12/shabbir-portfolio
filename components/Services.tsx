@@ -20,35 +20,35 @@ export default function Services({ services }: { services: ServiceItem[] }) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.45, delay: i * 0.06 }}
-            className="group relative grid grid-cols-[2.5rem_1fr] md:grid-cols-[3.5rem_minmax(180px,1fr)_auto_minmax(220px,1.2fr)] gap-4 md:gap-8 items-center
+            className="group relative flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6
                        border-b border-line py-6 md:py-8 px-2 -mx-2 overflow-hidden"
           >
             {/* Ambient background hover sweep */}
             <div
               className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out
-                         bg-gradient-to-r from-transparent via-mint/10 to-transparent pointer-events-none"
+                         bg-gradient-to-r from-transparent via-lime/10 to-transparent pointer-events-none"
             />
 
-            {/* Index */}
-            <span className="relative font-mono text-xs text-muted group-hover:text-mint transition-colors">
-              {s.index}
-            </span>
+            {/* Left: Index & Title (shrink-0 so title stays crisp on one line) */}
+            <div className="relative flex items-center gap-4 md:gap-6 shrink-0 z-10">
+              <span className="font-mono text-xs text-muted group-hover:text-lime transition-colors">
+                {s.index}
+              </span>
+              <h3
+                className="font-display font-semibold text-xl md:text-3xl uppercase origin-left transition-all duration-500 group-hover:translate-x-3 group-hover:text-lime group-hover:glow-text group-hover:scale-[1.02]"
+                style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+              >
+                {s.title}
+              </h3>
+            </div>
 
-            {/* Title */}
-            <h3
-              className="relative font-display font-semibold text-xl md:text-3xl uppercase origin-left transition-all duration-500 group-hover:translate-x-4 group-hover:text-mint group-hover:glow-text group-hover:font-bold group-hover:scale-[1.03]"
-              style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-            >
-              {s.title}
-            </h3>
-
-            {/* Desktop Center Thumbnail with faded edges (Image 02) */}
-            {s.image && (
+            {/* Middle: Full Available Width Auto-Adjusting Thumbnail (faded only on left and right) */}
+            {s.image ? (
               <div
-                className="relative hidden md:flex items-center justify-center h-16 w-64 lg:w-80 shrink-0 overflow-hidden mx-auto transition-transform duration-500 group-hover:scale-105"
+                className="relative hidden md:flex flex-1 min-w-[100px] h-16 md:h-20 items-center justify-center overflow-hidden mx-3 lg:mx-6 transition-transform duration-500 group-hover:scale-[1.01]"
                 style={{
-                  maskImage: "radial-gradient(ellipse 75% 70% at 50% 50%, black 35%, transparent 95%)",
-                  WebkitMaskImage: "radial-gradient(ellipse 75% 70% at 50% 50%, black 35%, transparent 95%)",
+                  maskImage: "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+                  WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
                 }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -58,23 +58,17 @@ export default function Services({ services }: { services: ServiceItem[] }) {
                   className="w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity duration-500 filter brightness-95 contrast-105"
                 />
               </div>
+            ) : (
+              <div className="hidden md:block flex-1 min-w-[20px]" />
             )}
 
-            {/* Detail */}
-            <p
-              className="relative text-muted text-sm md:text-base leading-relaxed col-span-2 md:col-span-1 text-left md:text-right transition-transform duration-500 md:group-hover:-translate-x-4"
-              style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-            >
-              {s.detail}
-            </p>
-
-            {/* Mobile Thumbnail with faded edges */}
+            {/* Mobile Thumbnail with same left/right faded edges */}
             {s.image && (
               <div
-                className="md:hidden col-span-2 relative h-20 w-full overflow-hidden my-1"
+                className="md:hidden relative h-20 w-full overflow-hidden my-1"
                 style={{
-                  maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 98%)",
-                  WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 98%)",
+                  maskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+                  WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
                 }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -85,6 +79,14 @@ export default function Services({ services }: { services: ServiceItem[] }) {
                 />
               </div>
             )}
+
+            {/* Right: Description (shrink-0, auto-sized, text-right on desktop) */}
+            <p
+              className="relative text-muted text-sm md:text-base leading-relaxed shrink-0 max-w-xs md:max-w-sm lg:max-w-md text-left md:text-right transition-transform duration-500 md:group-hover:-translate-x-3 z-10"
+              style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+            >
+              {s.detail}
+            </p>
           </motion.div>
         ))}
       </div>

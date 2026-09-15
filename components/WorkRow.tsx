@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import type { WorkItem } from "@/lib/types";
 
-const THUMB_W = 300;
-const THUMB_H = 210;
+const THUMB_W = 420;
+const THUMB_H = 280;
 const EDGE_FADE = 90; // px from a viewport edge where the preview fades out
 
 export default function WorkRow({ item, delay }: { item: WorkItem; delay: number }) {
@@ -28,7 +28,7 @@ export default function WorkRow({ item, delay }: { item: WorkItem; delay: number
     const maxX = window.innerWidth - THUMB_W - margin;
     const maxY = window.innerHeight - THUMB_H - margin;
     x.set(Math.min(Math.max(clientX + 28, margin), Math.max(maxX, margin)));
-    y.set(Math.min(Math.max(clientY - 100, margin), Math.max(maxY, margin)));
+    y.set(Math.min(Math.max(clientY - 140, margin), Math.max(maxY, margin)));
 
     const distToEdge = Math.min(clientX, window.innerWidth - clientX);
     setEdgeFactor(Math.min(1, Math.max(0, (EDGE_FADE - distToEdge) / EDGE_FADE)));

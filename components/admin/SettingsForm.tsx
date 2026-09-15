@@ -6,37 +6,63 @@ const PRESETS = [
   {
     name: "Cyberpunk Lime (Default)",
     primary: "#c6ff3d",
-    secondary: "#c3fffc",
     bg: "#0a0a0a",
     text: "#f2f1ed",
   },
   {
     name: "Electric Blue & Violet",
     primary: "#00f0ff",
-    secondary: "#a78bfa",
     bg: "#050814",
     text: "#f0f4ff",
   },
   {
     name: "Sunset Ember & Amber",
     primary: "#ff5722",
-    secondary: "#ffc107",
     bg: "#0e0b0a",
     text: "#fdf6f0",
   },
   {
     name: "Emerald Matrix",
     primary: "#10b981",
-    secondary: "#6ee7b7",
     bg: "#05130d",
     text: "#f0fdf4",
   },
   {
     name: "Monochrome Studio",
     primary: "#ffffff",
-    secondary: "#a1a1aa",
     bg: "#000000",
     text: "#f4f4f5",
+  },
+];
+
+const GRADIENT_PRESETS = [
+  {
+    name: "Solid (No Gradient)",
+    gradient: "",
+  },
+  {
+    name: "Neon Lime → Emerald",
+    gradient: "linear-gradient(135deg, #c6ff3d 0%, #10b981 100%)",
+  },
+  {
+    name: "Electric Cyan → Violet",
+    gradient: "linear-gradient(135deg, #00f0ff 0%, #8b5cf6 100%)",
+  },
+  {
+    name: "Sunset Flame",
+    gradient: "linear-gradient(135deg, #ff5722 0%, #ffc107 100%)",
+  },
+  {
+    name: "Electric Fuchsia → Purple",
+    gradient: "linear-gradient(135deg, #ff007f 0%, #7928ca 100%)",
+  },
+  {
+    name: "Solar Gold → Amber",
+    gradient: "linear-gradient(135deg, #fbbf24 0%, #ea580c 100%)",
+  },
+  {
+    name: "Hyper Chrome Silver",
+    gradient: "linear-gradient(135deg, #ffffff 0%, #64748b 100%)",
   },
 ];
 
@@ -48,6 +74,7 @@ export default function SettingsForm({
   initialSecondaryColor,
   initialBgColor,
   initialTextColor,
+  initialAccentGradient,
 }: {
   initialTitle: string;
   initialLogoUrl: string | null;
@@ -56,16 +83,18 @@ export default function SettingsForm({
   initialSecondaryColor?: string | null;
   initialBgColor?: string | null;
   initialTextColor?: string | null;
+  initialAccentGradient?: string | null;
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [logoUrl, setLogoUrl] = useState(initialLogoUrl);
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl);
 
-  // Theme colors state
+  // Theme 3-colors state
   const [primaryColor, setPrimaryColor] = useState(initialPrimaryColor || "#c6ff3d");
-  const [secondaryColor, setSecondaryColor] = useState(initialSecondaryColor || "#c3fffc");
+  const [secondaryColor, setSecondaryColor] = useState(initialSecondaryColor || initialPrimaryColor || "#c6ff3d");
   const [bgColor, setBgColor] = useState(initialBgColor || "#0a0a0a");
   const [textColor, setTextColor] = useState(initialTextColor || "#f2f1ed");
+  const [accentGradient, setAccentGradient] = useState(initialAccentGradient || "");
 
   const [savingTitle, setSavingTitle] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
@@ -179,13 +208,14 @@ export default function SettingsForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           primaryColor,
-          secondaryColor,
+          secondaryColor: primaryColor, // Sync to enforce uniform 3-color theme
           bgColor,
           textColor,
+          accentGradient: accentGradient.trim(),
         }),
       });
       const json = await res.json();
-      setColorMsg(res.ok ? "Theme colors updated! Live across entire site." : json.error || "Failed to save.");
+      setColorMsg(res.ok ? "Theme colors & gradient updated! Live across entire site." : json.error || "Failed to save.");
     } catch {
       setColorMsg("Network error.");
     } finally {
@@ -195,13 +225,19 @@ export default function SettingsForm({
 
   function applyPreset(preset: typeof PRESETS[number]) {
     setPrimaryColor(preset.primary);
-    setSecondaryColor(preset.secondary);
+    setSecondaryColor(preset.primary); // enforce 3-color uniformity
     setBgColor(preset.bg);
     setTextColor(preset.text);
     setColorMsg(`Selected preset: "${preset.name}". Click SAVE COLORS to apply.`);
   }
 
+  function applyGradient(grad: string) {
+    setAccentGradient(grad);
+    setColorMsg("Gradient selected! Click SAVE COLORS to apply.");
+  }
+
   async function resetColors() {
+    setAccentGradient("");
     applyPreset(PRESETS[0]);
   }
 
@@ -232,16 +268,16 @@ export default function SettingsForm({
         </div>
       </div>
 
-      {/* THEME COLORS (New requested feature) */}
+      {/* THEME COLORS (3 Uniform Colors + Gradients) */}
       <div className="border-t border-line pt-8">
-        <p className="font-mono text-xs tracking-widest2 text-lime mb-2">WEBSITE THEME COLORS</p>
+        <p className="font-mono text-xs tracking-widest2 text-lime mb-2">UNIFIED 3-COLOR THEME &amp; GRADIENTS</p>
         <p className="text-muted text-xs mb-6">
-          Customize the accent colors, text, and background across your entire portfolio in real time.
+          Consistent 3-color palette (Background, Text, and Accent) across the entire portfolio, with optional gradient accents.
         </p>
 
-        {/* Presets */}
+        {/* 3-Color Presets */}
         <div className="mb-6">
-          <span className="font-mono text-[0.65rem] tracking-widest2 text-muted block mb-3">QUICK PRESETS</span>
+          <span className="font-mono text-[0.65rem] tracking-widest2 text-muted block mb-3">QUICK 3-COLOR PRESETS</span>
           <div className="flex flex-wrap gap-2">
             {PRESETS.map((p) => (
               <button
@@ -257,46 +293,31 @@ export default function SettingsForm({
           </div>
         </div>
 
-        {/* Color pickers grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+        {/* Color pickers grid (3 uniform colors) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           {/* Primary Accent */}
           <div className="flex flex-col gap-2 p-3 border border-line rounded">
             <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
-              PRIMARY ACCENT (Buttons, Let&apos;s talk glow)
+              1. ACCENT COLOR
             </span>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={primaryColor}
-                onChange={(e) => setPrimaryColor(e.target.value)}
-                className="w-9 h-9 rounded cursor-pointer border border-line bg-transparent p-0.5"
+                onChange={(e) => {
+                  setPrimaryColor(e.target.value);
+                  setSecondaryColor(e.target.value);
+                }}
+                className="w-8 h-8 rounded cursor-pointer border border-line bg-transparent p-0.5"
               />
               <input
                 type="text"
                 value={primaryColor}
-                onChange={(e) => setPrimaryColor(e.target.value)}
-                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-28 uppercase focus-visible:outline-none focus:border-lime"
-              />
-            </div>
-          </div>
-
-          {/* Secondary Accent */}
-          <div className="flex flex-col gap-2 p-3 border border-line rounded">
-            <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
-              SECONDARY ACCENT (01, 02 numbers, Lab cards)
-            </span>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={secondaryColor}
-                onChange={(e) => setSecondaryColor(e.target.value)}
-                className="w-9 h-9 rounded cursor-pointer border border-line bg-transparent p-0.5"
-              />
-              <input
-                type="text"
-                value={secondaryColor}
-                onChange={(e) => setSecondaryColor(e.target.value)}
-                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-28 uppercase focus-visible:outline-none focus:border-lime"
+                onChange={(e) => {
+                  setPrimaryColor(e.target.value);
+                  setSecondaryColor(e.target.value);
+                }}
+                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-24 uppercase focus-visible:outline-none focus:border-lime"
               />
             </div>
           </div>
@@ -304,20 +325,20 @@ export default function SettingsForm({
           {/* Background Canvas */}
           <div className="flex flex-col gap-2 p-3 border border-line rounded">
             <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
-              BACKGROUND (Dark canvas)
+              2. BACKGROUND
             </span>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={bgColor}
                 onChange={(e) => setBgColor(e.target.value)}
-                className="w-9 h-9 rounded cursor-pointer border border-line bg-transparent p-0.5"
+                className="w-8 h-8 rounded cursor-pointer border border-line bg-transparent p-0.5"
               />
               <input
                 type="text"
                 value={bgColor}
                 onChange={(e) => setBgColor(e.target.value)}
-                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-28 uppercase focus-visible:outline-none focus:border-lime"
+                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-24 uppercase focus-visible:outline-none focus:border-lime"
               />
             </div>
           </div>
@@ -325,22 +346,71 @@ export default function SettingsForm({
           {/* Text Color */}
           <div className="flex flex-col gap-2 p-3 border border-line rounded">
             <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
-              TEXT COLOR (Headings &amp; body)
+              3. TEXT COLOR
             </span>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={textColor}
                 onChange={(e) => setTextColor(e.target.value)}
-                className="w-9 h-9 rounded cursor-pointer border border-line bg-transparent p-0.5"
+                className="w-8 h-8 rounded cursor-pointer border border-line bg-transparent p-0.5"
               />
               <input
                 type="text"
                 value={textColor}
                 onChange={(e) => setTextColor(e.target.value)}
-                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-28 uppercase focus-visible:outline-none focus:border-lime"
+                className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-24 uppercase focus-visible:outline-none focus:border-lime"
               />
             </div>
+          </div>
+        </div>
+
+        {/* GRADIENT ACCENT OPTIONS */}
+        <div className="mb-6 p-4 border border-line rounded bg-surface/50">
+          <span className="font-mono text-[0.65rem] tracking-widest2 text-lime block mb-2">
+            GRADIENT OPTIONS (APPLIED TO ACCENTS &amp; HIGHLIGHTS)
+          </span>
+          <p className="text-muted text-xs mb-3">
+            Choose a gradient preset below or type a custom CSS linear-gradient:
+          </p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {GRADIENT_PRESETS.map((g) => {
+              const isSelected = accentGradient === g.gradient;
+              return (
+                <button
+                  key={g.name}
+                  type="button"
+                  onClick={() => applyGradient(g.gradient)}
+                  className={`flex items-center gap-2 border px-3 py-1.5 rounded-full text-xs font-mono transition-colors ${
+                    isSelected
+                      ? "border-lime text-paper bg-surface"
+                      : "border-line text-muted hover:text-paper hover:border-line/80"
+                  }`}
+                >
+                  <span
+                    className="w-3.5 h-3.5 rounded-full shrink-0 border border-white/20"
+                    style={{
+                      background: g.gradient || primaryColor,
+                    }}
+                  />
+                  {g.name}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Custom gradient input */}
+          <div className="flex flex-col gap-1.5">
+            <span className="font-mono text-[0.65rem] tracking-widest2 text-muted">
+              CUSTOM GRADIENT CSS (OPTIONAL)
+            </span>
+            <input
+              type="text"
+              placeholder="e.g. linear-gradient(135deg, #c6ff3d 0%, #10b981 100%)"
+              value={accentGradient}
+              onChange={(e) => setAccentGradient(e.target.value)}
+              className="bg-transparent border-b border-line py-1 text-paper font-mono text-xs w-full focus-visible:outline-none focus:border-lime"
+            />
           </div>
         </div>
 
@@ -350,15 +420,38 @@ export default function SettingsForm({
           style={{ backgroundColor: bgColor, color: textColor }}
         >
           <div>
-            <span className="font-mono text-xs mr-2" style={{ color: secondaryColor }}>01 /</span>
-            <span className="font-display uppercase text-sm font-semibold">Live Preview Text</span>
+            <span
+              className="font-mono text-xs mr-2"
+              style={{
+                background: accentGradient || undefined,
+                color: accentGradient ? "transparent" : primaryColor,
+                WebkitBackgroundClip: accentGradient ? "text" : undefined,
+                WebkitTextFillColor: accentGradient ? "transparent" : undefined,
+              }}
+            >
+              01 /
+            </span>
+            <span
+              className="font-display uppercase text-sm font-semibold"
+              style={{
+                background: accentGradient || undefined,
+                color: accentGradient ? "transparent" : undefined,
+                WebkitBackgroundClip: accentGradient ? "text" : undefined,
+                WebkitTextFillColor: accentGradient ? "transparent" : undefined,
+              }}
+            >
+              Unified Portfolio Preview
+            </span>
           </div>
           <button
             type="button"
-            className="px-3 py-1 rounded-full font-mono text-[0.65rem] tracking-widest2"
-            style={{ backgroundColor: primaryColor, color: bgColor }}
+            className="px-4 py-1.5 rounded-full font-mono text-[0.65rem] tracking-widest2 font-semibold transition-transform hover:scale-105"
+            style={{
+              background: accentGradient || primaryColor,
+              color: bgColor,
+            }}
           >
-            ACTION BUTTON
+            SEND BRIEF ↗
           </button>
         </div>
 
@@ -369,7 +462,7 @@ export default function SettingsForm({
             disabled={savingColors}
             className="rounded-full bg-lime text-lime-ink px-6 py-2.5 font-mono text-xs tracking-widest2 disabled:opacity-50"
           >
-            {savingColors ? "SAVING…" : "SAVE COLORS"}
+            {savingColors ? "SAVING…" : "SAVE COLORS &amp; GRADIENT"}
           </button>
           <button
             type="button"

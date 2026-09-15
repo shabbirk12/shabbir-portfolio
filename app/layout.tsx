@@ -29,19 +29,24 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings();
 
+  const primary = settings.primaryColor || "#c6ff3d";
+  const bg = settings.bgColor || "#0a0a0a";
+  const text = settings.textColor || "#f2f1ed";
+  const gradient = settings.accentGradient?.trim() || "";
+
   const themeOverrides = [
-    settings.primaryColor
-      ? `.text-lime { color: ${settings.primaryColor} !important; } .bg-lime { background-color: ${settings.primaryColor} !important; } .border-lime { border-color: ${settings.primaryColor} !important; } :root { --color-lime: ${settings.primaryColor}; }`
-      : null,
-    settings.secondaryColor
-      ? `.text-mint { color: ${settings.secondaryColor} !important; } .bg-mint { background-color: ${settings.secondaryColor} !important; } .border-mint { border-color: ${settings.secondaryColor} !important; } :root { --color-mint: ${settings.secondaryColor}; }`
-      : null,
-    settings.bgColor
-      ? `body { background-color: ${settings.bgColor} !important; } :root { --color-ink: ${settings.bgColor}; }`
-      : null,
-    settings.textColor
-      ? `body { color: ${settings.textColor} !important; } :root { --color-paper: ${settings.textColor}; }`
-      : null,
+    `:root { --color-lime: ${primary}; --color-mint: ${primary}; --color-ink: ${bg}; --color-paper: ${text}; ${
+      gradient ? `--accent-gradient: ${gradient};` : ""
+    } }`,
+    `.text-lime, .text-mint { color: ${primary} !important; }`,
+    `.bg-lime, .bg-mint { background-color: ${primary} !important; }`,
+    `.border-lime, .border-mint { border-color: ${primary} !important; }`,
+    `body { background-color: ${bg} !important; color: ${text} !important; }`,
+    `::selection { background-color: ${primary} !important; color: ${bg} !important; }`,
+    `:focus-visible { outline-color: ${primary} !important; }`,
+    gradient
+      ? `.accent-gradient { background: ${gradient} !important; } .accent-gradient-text { background: ${gradient} !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }`
+      : "",
   ]
     .filter(Boolean)
     .join(" ");

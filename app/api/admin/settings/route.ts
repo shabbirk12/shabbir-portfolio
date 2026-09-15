@@ -15,7 +15,7 @@ export async function PUT(req: Request) {
 
   try {
     const body = await req.json();
-    const { title, avatarUrl, logoUrl, primaryColor, secondaryColor, bgColor, textColor } = body;
+    const { title, avatarUrl, logoUrl, primaryColor, secondaryColor, bgColor, textColor, accentGradient } = body;
 
     const updates: Partial<{
       title: string;
@@ -25,6 +25,7 @@ export async function PUT(req: Request) {
       secondaryColor: string | null;
       bgColor: string | null;
       textColor: string | null;
+      accentGradient: string | null;
     }> = {};
     if (typeof title === "string" && title.trim().length > 0) {
       updates.title = title.trim();
@@ -46,6 +47,9 @@ export async function PUT(req: Request) {
     }
     if (textColor !== undefined) {
       updates.textColor = textColor === "" ? null : textColor;
+    }
+    if (accentGradient !== undefined) {
+      updates.accentGradient = accentGradient === "" ? null : accentGradient;
     }
 
     await updateSiteSettings(updates);

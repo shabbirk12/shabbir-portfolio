@@ -11,11 +11,11 @@ const config: Config = {
         line: "#242424",
         paper: "#f2f1ed",
         muted: "#8f9490",
-        mint: "#c3fffc",
-        "mint-ink": "#06201f",
+        mint: "#c6ff3d",       // unified to match lime — secondary = primary
+        "mint-ink": "#1c2600", // updated to match lime-ink
         lime: "#c6ff3d",
         "lime-ink": "#1c2600",
-        teal: "#0f3d38",
+        teal: "#142805",       // dark lime teal, was teal-cyan
       },
       fontFamily: {
         display: ["General Sans", "sans-serif"],
@@ -51,8 +51,8 @@ const config: Config = {
         },
       },
       boxShadow: {
-        glow: "0 0 60px -12px rgba(195,255,252,0.45)",
-        "glow-sm": "0 0 24px -8px rgba(195,255,252,0.5)",
+        glow: "0 0 60px -12px rgba(198,255,61,0.45)",
+        "glow-sm": "0 0 24px -8px rgba(198,255,61,0.5)",
         "glow-lime": "0 0 24px -8px rgba(198,255,61,0.55)",
       },
     },

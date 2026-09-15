@@ -27,6 +27,7 @@ export default async function AdminSettingsPage() {
         initialSecondaryColor={settings.secondaryColor}
         initialBgColor={settings.bgColor}
         initialTextColor={settings.textColor}
+        initialAccentGradient={settings.accentGradient}
       />
     </main>
   );
