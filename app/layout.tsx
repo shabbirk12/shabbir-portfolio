@@ -43,7 +43,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     `.border-lime, .border-mint { border-color: ${primary} !important; }`,
     `body { background-color: ${bg} !important; color: ${text} !important; }`,
     `::selection { background-color: ${primary} !important; color: ${bg} !important; }`,
-    `:focus-visible { outline-color: ${primary} !important; }`,
     gradient
       ? `.accent-gradient { background: ${gradient} !important; } .accent-gradient-text { background: ${gradient} !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }`
       : "",

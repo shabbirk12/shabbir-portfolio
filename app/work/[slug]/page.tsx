@@ -103,6 +103,22 @@ export default async function WorkDetail({ params }: { params: { slug: string } 
                 <p className="font-mono text-[0.6rem] tracking-widest2 text-lime uppercase mb-1">CATEGORY</p>
                 <p className="font-body text-sm text-paper">{item.tag}</p>
               </div>
+              {(item.liveUrl || cs.liveUrl) && (
+                <div className="p-3 col-span-2 border-t border-line/60 flex items-center justify-between gap-4 flex-wrap bg-surface/30">
+                  <div>
+                    <p className="font-mono text-[0.6rem] tracking-widest2 text-lime uppercase">LIVE SITE</p>
+                    <p className="font-mono text-xs text-muted truncate max-w-xs">{item.liveUrl || cs.liveUrl}</p>
+                  </div>
+                  <a
+                    href={item.liveUrl || cs.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-lime text-lime-ink px-4 py-2 font-mono text-xs tracking-widest2 font-semibold transition-transform hover:scale-105 hover:shadow-glow-lime"
+                  >
+                    VISIT SITE ↗
+                  </a>
+                </div>
+              )}
             </div>
           </Reveal>
         </div>
@@ -124,16 +140,28 @@ export default async function WorkDetail({ params }: { params: { slug: string } 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent pointer-events-none" />
 
-          <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between pointer-events-none">
+          <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between pointer-events-none gap-4 flex-wrap">
             <span className="font-mono text-xs tracking-widest2 text-paper bg-ink/70 backdrop-blur-sm px-3 py-1.5 border border-line rounded">
               {item.index} · OVERVIEW SHOWCASE
             </span>
-            <Link
-              href="/#contact"
-              className="pointer-events-auto hidden sm:inline-flex items-center gap-2 rounded-full bg-lime text-lime-ink px-5 py-2.5 font-mono text-xs tracking-widest2 transition-transform hover:scale-105 hover:shadow-glow-lime"
-            >
-              DISCUSS SIMILAR PROJECT ↗
-            </Link>
+            <div className="pointer-events-auto flex items-center gap-3">
+              {(item.liveUrl || cs.liveUrl) && (
+                <a
+                  href={item.liveUrl || cs.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-lime text-lime-ink px-5 py-2.5 font-mono text-xs tracking-widest2 font-semibold transition-transform hover:scale-105 hover:shadow-glow-lime"
+                >
+                  SEE LIVE SITE ↗
+                </a>
+              )}
+              <Link
+                href="/#contact"
+                className="hidden sm:inline-flex items-center gap-2 rounded-full border border-line bg-ink/80 text-paper px-5 py-2.5 font-mono text-xs tracking-widest2 transition-colors hover:border-lime hover:text-lime"
+              >
+                DISCUSS SIMILAR PROJECT ↗
+              </Link>
+            </div>
           </div>
         </Reveal>
 
@@ -275,6 +303,31 @@ export default async function WorkDetail({ params }: { params: { slug: string } 
               <p className="font-display text-xl sm:text-3xl uppercase leading-snug text-lime relative z-10 pl-6 sm:pl-10">
                 {cs.results.quote}
               </p>
+            </Reveal>
+          )}
+
+          {/* Live Site Experience Banner */}
+          {(item.liveUrl || cs.liveUrl) && (
+            <Reveal delay={0.1} className="mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between p-8 border border-line bg-surface/50 rounded-lg gap-6">
+              <div>
+                <span className="font-mono text-[0.65rem] tracking-widest2 text-lime uppercase block mb-1">
+                  PRODUCTION DEPLOYMENT
+                </span>
+                <h3 className="font-display text-xl sm:text-2xl uppercase text-paper font-semibold">
+                  Experience the live platform
+                </h3>
+                <p className="text-muted text-sm mt-1">
+                  Explore interactive features, full responsiveness, and live production performance.
+                </p>
+              </div>
+              <a
+                href={item.liveUrl || cs.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-lime text-lime-ink px-6 py-3 font-mono text-xs tracking-widest2 font-semibold transition-transform hover:scale-105 hover:shadow-glow-lime shrink-0"
+              >
+                VISIT LIVE SITE ↗
+              </a>
             </Reveal>
           )}
         </section>

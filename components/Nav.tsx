@@ -10,8 +10,10 @@ const links = [
   { n: "01", id: "about", label: "ABOUT", href: "/#about" },
   { n: "02", id: "services", label: "SERVICES", href: "/#services" },
   { n: "03", id: "work", label: "WORK", href: "/#work" },
-  { n: "04", id: "lab", label: "LAB", href: "/#lab" },
-  { n: "05", id: "contact", label: "CONTACT", href: "/#contact" },
+  { n: "04", id: "reviews", label: "REVIEWS", href: "/#reviews" },
+  { n: "05", id: "blog", label: "BLOG", href: "/blog" },
+  { n: "06", id: "cv", label: "CV", href: "/cv" },
+  { n: "07", id: "contact", label: "CONTACT", href: "/#contact" },
 ];
 
 export default function Nav() {

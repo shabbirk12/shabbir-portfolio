@@ -75,6 +75,7 @@ export default function SettingsForm({
   initialBgColor,
   initialTextColor,
   initialAccentGradient,
+  initialGeminiApiKey,
 }: {
   initialTitle: string;
   initialLogoUrl: string | null;
@@ -84,6 +85,7 @@ export default function SettingsForm({
   initialBgColor?: string | null;
   initialTextColor?: string | null;
   initialAccentGradient?: string | null;
+  initialGeminiApiKey?: string | null;
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [logoUrl, setLogoUrl] = useState(initialLogoUrl);
@@ -95,16 +97,36 @@ export default function SettingsForm({
   const [bgColor, setBgColor] = useState(initialBgColor || "#0a0a0a");
   const [textColor, setTextColor] = useState(initialTextColor || "#f2f1ed");
   const [accentGradient, setAccentGradient] = useState(initialAccentGradient || "");
+  const [geminiApiKey, setGeminiApiKey] = useState(initialGeminiApiKey || "");
 
   const [savingTitle, setSavingTitle] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [savingColors, setSavingColors] = useState(false);
+  const [savingGemini, setSavingGemini] = useState(false);
 
   const [titleMsg, setTitleMsg] = useState("");
   const [logoMsg, setLogoMsg] = useState("");
   const [avatarMsg, setAvatarMsg] = useState("");
   const [colorMsg, setColorMsg] = useState("");
+  const [geminiMsg, setGeminiMsg] = useState("");
+
+  async function saveGeminiKey() {
+    setSavingGemini(true);
+    setGeminiMsg("");
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ geminiApiKey: geminiApiKey.trim() }),
+      });
+      setGeminiMsg(res.ok ? "Gemini API Key saved successfully! AI drafting active." : "Failed to save.");
+    } catch {
+      setGeminiMsg("Network error.");
+    } finally {
+      setSavingGemini(false);
+    }
+  }
 
   async function saveTitle() {
     setSavingTitle(true);
@@ -553,6 +575,48 @@ export default function SettingsForm({
           )}
         </div>
         {avatarMsg && <p className="font-mono text-xs text-muted mt-3">{avatarMsg}</p>}
+      </div>
+
+      {/* 5. GEMINI AI WRITING ASSISTANT */}
+      <div className="border border-line p-6 bg-surface/30 rounded">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lime text-base">✨</span>
+          <p className="font-mono text-xs tracking-widest2 text-lime font-bold uppercase">
+            GEMINI AI WRITING ASSISTANT
+          </p>
+        </div>
+        <p className="text-muted text-xs mb-4 leading-relaxed">
+          Power the &quot;✨ Write with Gemini&quot; buttons across Project and Blog editors with your Google Gemini API key.
+          You can get a free API key from{" "}
+          <a
+            href="https://aistudio.google.com/app/apikey"
+            target="_blank"
+            rel="noreferrer"
+            className="text-lime underline hover:opacity-80"
+          >
+            Google AI Studio ↗
+          </a>
+          . (If left blank, the app will use smart built-in generator fallbacks).
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <input
+            type="password"
+            placeholder="AIzaSy..."
+            value={geminiApiKey}
+            onChange={(e) => setGeminiApiKey(e.target.value)}
+            className="flex-1 bg-ink border border-line py-2.5 px-3 rounded text-sm text-paper placeholder:text-muted/40 font-mono focus:border-lime"
+          />
+          <button
+            type="button"
+            onClick={saveGeminiKey}
+            disabled={savingGemini}
+            className="rounded-full bg-lime text-lime-ink px-6 py-2.5 font-mono text-xs tracking-widest2 font-semibold hover:scale-105 transition-transform disabled:opacity-50 shrink-0"
+          >
+            {savingGemini ? "SAVING…" : "SAVE AI KEY"}
+          </button>
+        </div>
+        {geminiMsg && <p className="font-mono text-xs text-lime mt-3">{geminiMsg}</p>}
       </div>
     </div>
   );

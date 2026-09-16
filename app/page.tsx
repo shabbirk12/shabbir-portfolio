@@ -8,10 +8,12 @@ import Toolkit from "@/components/Toolkit";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
 import Lab from "@/components/Lab";
+import Reviews from "@/components/Reviews";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { getSkills, getStats, getServices, getAboutDetails } from "@/lib/contentStore";
 import { getSiteSettings } from "@/lib/siteSettings";
+import { getApprovedReviews } from "@/lib/reviewsStore";
 
 // The Work section (and now Skills/Stats/Services/About details) read live data
 // from disk via the admin dashboard's JSON store — this must render dynamically
@@ -19,12 +21,13 @@ import { getSiteSettings } from "@/lib/siteSettings";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [skills, stats, services, aboutDetails, settings] = await Promise.all([
+  const [skills, stats, services, aboutDetails, settings, reviews] = await Promise.all([
     getSkills(),
     getStats(),
     getServices(),
     getAboutDetails(),
     getSiteSettings(),
+    getApprovedReviews(),
   ]);
 
   return (
@@ -39,6 +42,7 @@ export default async function Home() {
       <Services services={services} />
       <Work />
       <Lab />
+      <Reviews initialReviews={reviews} />
       <Contact />
       <Footer />
     </main>

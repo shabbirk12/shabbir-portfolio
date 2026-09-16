@@ -25,12 +25,14 @@ function emptyProject(): WorkItem {
     slug: "",
     summary: "",
     image: "",
+    liveUrl: "",
     stats: emptyStats(3),
     caseStudy: {
       role: "",
       timeline: "",
       status: "",
       heroLine: "",
+      liveUrl: "",
       context: { summary: "", stats: emptyStats(3) },
       challenge: "",
       build: { summary: "", bullets: [""] },
@@ -65,6 +67,37 @@ export default function ProjectForm({
   const [uploadingThumb, setUploadingThumb] = useState(false);
   const [thumbMsg, setThumbMsg] = useState("");
   const [uploadingGalleryIdx, setUploadingGalleryIdx] = useState<number | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+
+  async function generateWithGemini(task: "project_summary" | "project_hero") {
+    const basis = item.title || item.tag || item.summary;
+    if (!basis.trim()) {
+      alert("Please enter a Project Title or Tag first so Gemini has context!");
+      return;
+    }
+    setAiLoading(true);
+    try {
+      const res = await fetch("/api/admin/ai/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task, prompt: `${item.title} (${item.tag || "Creative Design & Engineering"})` }),
+      });
+      const data = await res.json();
+      if (data.generatedText) {
+        if (task === "project_summary") {
+          set("summary", data.generatedText);
+        } else if (task === "project_hero") {
+          setCS("heroLine", data.generatedText);
+        }
+      } else {
+        alert(data.error || "AI generation failed.");
+      }
+    } catch {
+      alert("Network error calling Gemini AI assistant.");
+    } finally {
+      setAiLoading(false);
+    }
+  }
 
   async function uploadFile(file: File): Promise<string> {
     const formData = new FormData();
@@ -232,7 +265,17 @@ export default function ProjectForm({
       </div>
 
       <div className={fieldWrap}>
-        <span className={labelClass}>SUMMARY (card description, one line)</span>
+        <div className="flex items-center justify-between">
+          <span className={labelClass}>SUMMARY (card description, one line)</span>
+          <button
+            type="button"
+            onClick={() => generateWithGemini("project_summary")}
+            disabled={aiLoading}
+            className="font-mono text-[0.65rem] tracking-widest2 text-lime hover:underline cursor-pointer disabled:opacity-50"
+          >
+            {aiLoading ? "GENERATING…" : "✨ POLISH WITH GEMINI"}
+          </button>
+        </div>
         <textarea
           required
           rows={2}
@@ -243,9 +286,27 @@ export default function ProjectForm({
       </div>
 
       <div className={fieldWrap}>
+        <span className={labelClass}>LIVE PROJECT / WEBSITE URL (optional)</span>
+        <input
+          type="url"
+          placeholder="https://example.com"
+          value={item.liveUrl || item.caseStudy?.liveUrl || ""}
+          onChange={(e) => {
+            const val = e.target.value;
+            set("liveUrl", val);
+            setCS("liveUrl", val);
+          }}
+          className={inputClass}
+        />
+        <span className="font-mono text-[0.6rem] text-muted">
+          Displays a &quot;VISIT LIVE SITE ↗&quot; button for clients on the project case study page.
+        </span>
+      </div>
+
+      <div className={fieldWrap}>
         <div className="flex items-center justify-between">
           <span className={labelClass}>PROJECT THUMBNAIL</span>
-          <label className="font-mono text-[0.65rem] tracking-widest2 text-mint hover:underline cursor-pointer">
+          <label className="font-mono text-[0.65rem] tracking-widest2 text-lime hover:underline cursor-pointer">
             {uploadingThumb ? "UPLOADING…" : "+ UPLOAD NEW THUMBNAIL"}
             <input
               type="file"
@@ -312,7 +373,17 @@ export default function ProjectForm({
       </div>
 
       <div className={fieldWrap}>
-        <span className={labelClass}>HERO LINE (big case-study headline)</span>
+        <div className="flex items-center justify-between">
+          <span className={labelClass}>HERO LINE (big case-study headline)</span>
+          <button
+            type="button"
+            onClick={() => generateWithGemini("project_hero")}
+            disabled={aiLoading}
+            className="font-mono text-[0.65rem] tracking-widest2 text-lime hover:underline cursor-pointer disabled:opacity-50"
+          >
+            {aiLoading ? "GENERATING…" : "✨ GENERATE HOOK WITH GEMINI"}
+          </button>
+        </div>
         <textarea
           rows={2}
           value={item.caseStudy.heroLine}

@@ -16,20 +16,20 @@ export default async function AdminDashboard() {
     <main className="min-h-screen bg-ink px-6 md:px-10 py-10">
       <div className="flex items-center justify-between mb-10 flex-wrap gap-4">
         <div>
-          <p className="font-mono text-[0.65rem] tracking-widest2 text-mint mb-2">ADMIN</p>
+          <p className="font-mono text-[0.65rem] tracking-widest2 text-lime mb-2">ADMIN</p>
           <h1 className="font-display text-3xl uppercase text-paper">Projects</h1>
         </div>
         <div className="flex items-center gap-3">
           <Link
             href="/"
             target="_blank"
-            className="font-mono text-xs tracking-widest2 text-muted hover:text-mint transition-colors"
+            className="font-mono text-xs tracking-widest2 text-muted hover:text-lime transition-colors"
           >
             VIEW SITE ↗
           </Link>
           <Link
             href="/admin/projects/new"
-            className="rounded-full bg-mint text-mint-ink px-5 py-2.5 font-mono text-xs tracking-widest2"
+            className="rounded-full bg-lime text-lime-ink px-5 py-2.5 font-mono text-xs tracking-widest2 font-semibold hover:scale-105 transition-transform"
           >
             + NEW PROJECT
           </Link>
@@ -79,20 +79,22 @@ export default async function AdminDashboard() {
         </p>
         <div className="grid sm:grid-cols-3 gap-4">
           {[
+            { href: "/admin/reviews", label: "Client Reviews", desc: "Moderate testimonials & approve client feedback" },
+            { href: "/admin/blogs", label: "Blog Posts & AI", desc: "Write articles & draft with Gemini AI" },
+            { href: "/admin/settings", label: "Site Settings", desc: "Colors, gradients, Gemini API key & branding" },
+            { href: "/admin/content/services", label: "Services", desc: "The rows in the Services section" },
             { href: "/admin/content/skills", label: "Skills / Tools", desc: "The scrolling ticker under the hero" },
-            { href: "/admin/content/services", label: "Services", desc: "The 5 rows in the Services section" },
-            { href: "/admin/content/lab", label: "Experiment Lab", desc: "The 3 experiments in the Lab section" },
             { href: "/admin/content/toolkit/edit", label: "Toolkit", desc: "Design / Engineering columns" },
             { href: "/admin/content/stats", label: "Stats", desc: "The 4 big numbers below About" },
             { href: "/admin/content/about-details", label: "About Details", desc: "Role / Status / Focus rows" },
-            { href: "/admin/settings", label: "Site Settings", desc: "Colors, title, logo, and profile picture" },
+            { href: "/admin/content/lab", label: "Experiment Lab", desc: "The experiments in the Lab section" },
           ].map((c) => (
             <Link
               key={c.href}
               href={c.href}
-              className="border border-line p-5 hover:border-mint transition-colors group"
+              className="border border-line p-5 hover:border-lime transition-colors group bg-surface/30 rounded"
             >
-              <p className="font-display text-lg uppercase text-paper group-hover:text-mint transition-colors">
+              <p className="font-display text-lg uppercase text-paper group-hover:text-lime transition-colors">
                 {c.label}
               </p>
               <p className="text-muted text-xs mt-1">{c.desc}</p>

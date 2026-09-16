@@ -80,8 +80,11 @@ export default function Footer() {
             <a href="/#top" className="block text-paper hover:text-lime transition-colors mb-1">
               BACK TO TOP ↑
             </a>
-            <a href={profile.cv} download className="block text-paper hover:text-lime transition-colors">
-              DOWNLOAD CV ↓
+            <a href="/blog" className="block text-paper hover:text-lime transition-colors mb-1">
+              ARTICLES &amp; BLOG ↗
+            </a>
+            <a href="/cv" className="block text-paper hover:text-lime transition-colors">
+              VIEW &amp; PRINT CV ↗
             </a>
           </div>
         </Reveal>

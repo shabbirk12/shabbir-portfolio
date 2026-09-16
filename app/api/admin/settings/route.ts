@@ -15,7 +15,7 @@ export async function PUT(req: Request) {
 
   try {
     const body = await req.json();
-    const { title, avatarUrl, logoUrl, primaryColor, secondaryColor, bgColor, textColor, accentGradient } = body;
+    const { title, avatarUrl, logoUrl, primaryColor, secondaryColor, bgColor, textColor, accentGradient, geminiApiKey } = body;
 
     const updates: Partial<{
       title: string;
@@ -26,6 +26,7 @@ export async function PUT(req: Request) {
       bgColor: string | null;
       textColor: string | null;
       accentGradient: string | null;
+      geminiApiKey: string | null;
     }> = {};
     if (typeof title === "string" && title.trim().length > 0) {
       updates.title = title.trim();
@@ -50,6 +51,9 @@ export async function PUT(req: Request) {
     }
     if (accentGradient !== undefined) {
       updates.accentGradient = accentGradient === "" ? null : accentGradient;
+    }
+    if (geminiApiKey !== undefined) {
+      updates.geminiApiKey = geminiApiKey === "" ? null : geminiApiKey.trim();
     }
 
     await updateSiteSettings(updates);

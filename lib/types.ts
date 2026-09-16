@@ -8,12 +8,14 @@ export type WorkItem = {
   slug: string;
   summary: string;
   image: string;
+  liveUrl?: string;
   stats: WorkStat[];
   caseStudy: {
     role: string;
     timeline: string;
     status: string;
     heroLine: string;
+    liveUrl?: string;
     context: {
       summary: string;
       stats: WorkStat[];

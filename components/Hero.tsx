@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import Link from "next/link";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { profile } from "@/lib/data";
@@ -355,13 +356,12 @@ export default function Hero() {
                 Let&apos;s Build
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
-              <a
-                href={profile.cv}
-                download
+              <Link
+                href="/cv"
                 className="group inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-[#C6FF3D] hover:text-[#C6FF3D]"
               >
-                Download CV
-              </a>
+                View CV ↗
+              </Link>
             </div>
           </div>
         </div>

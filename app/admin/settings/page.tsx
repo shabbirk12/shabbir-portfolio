@@ -28,6 +28,7 @@ export default async function AdminSettingsPage() {
         initialBgColor={settings.bgColor}
         initialTextColor={settings.textColor}
         initialAccentGradient={settings.accentGradient}
+        initialGeminiApiKey={settings.geminiApiKey}
       />
     </main>
   );
