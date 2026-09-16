@@ -29,8 +29,9 @@ export async function POST(req: Request) {
       const systemInstruction = "You are an elite creative director, brand strategist, and senior full-stack engineer helping craft portfolio content for Shabbir Khan. Tone: crisp, bold, editorial, modern, punchy. Return cleanly formatted output without fluff.";
       const fullPrompt = `Task: ${task}\nContext: ${context || "Portfolio design & engineering"}\nInstructions/Topic: ${prompt}`;
 
+      const model = "gemini-3.6-flash";
       const geminiRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
