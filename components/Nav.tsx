@@ -53,16 +53,25 @@ export default function Nav() {
       const href = target.getAttribute("href");
       if (href && (href.startsWith("/#") || href.startsWith("#"))) {
         const id = href.replace(/^\/?#/, "");
+        const lenis = typeof window !== "undefined" ? (window as any).__lenis : null;
         if (id === "top") {
           e.preventDefault();
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          if (lenis) {
+            lenis.scrollTo(0, { duration: 1.4 });
+          } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
           window.history.replaceState(null, "", window.location.pathname);
           return;
         }
         const el = document.getElementById(id);
         if (el && window.location.pathname === "/") {
           e.preventDefault();
-          el.scrollIntoView({ behavior: "smooth" });
+          if (lenis) {
+            lenis.scrollTo(el, { offset: -40, duration: 1.4 });
+          } else {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
           window.history.replaceState(null, "", "/");
         }
       }
@@ -77,7 +86,12 @@ export default function Nav() {
       e.preventDefault();
       const target = document.getElementById(id);
       if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
+        const lenis = (window as any).__lenis;
+        if (lenis) {
+          lenis.scrollTo(target, { offset: -40, duration: 1.4 });
+        } else {
+          target.scrollIntoView({ behavior: "smooth" });
+        }
         window.history.replaceState(null, "", "/");
       }
     }

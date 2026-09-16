@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import Spotlight from "@/components/Spotlight";
+import SmoothScroll from "@/components/SmoothScroll";
 import { getSiteSettings } from "@/lib/siteSettings";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -59,6 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <div className="grain-overlay bg-grain" aria-hidden="true" />
         <Spotlight />
         <CustomCursor />
+        <SmoothScroll />
         {children}
       </body>
     </html>
