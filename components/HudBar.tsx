@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import useActiveSection from "@/lib/useActiveSection";
+import ThemeToggle from "@/components/ThemeToggle";
 
 function useLondonClock() {
   const [time, setTime] = useState("--:--:--");
@@ -90,10 +91,8 @@ export default function HudBar({ section }: { section?: string }) {
 
       <span className="text-lime">{label}</span>
 
-      <div className="flex items-center gap-4">
-        <span className="flex items-center gap-2">
-          THEME <span className="w-2.5 h-2.5 bg-lime inline-block" /> #C6FF3D
-        </span>
+      <div className="flex items-center gap-5">
+        <ThemeToggle compact />
         <span className="text-lime">
           {time} — LDN
         </span>

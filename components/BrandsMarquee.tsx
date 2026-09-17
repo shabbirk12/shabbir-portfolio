@@ -31,7 +31,7 @@ const BRANDS: Brand[] = [
         <text x="0" y="25" fontFamily="system-ui, sans-serif" fontSize="22" fontWeight="900" letterSpacing="-0.03em">
           NOCTURNE
         </text>
-        <circle cx="150" cy="18" r="4" fill="#C6FF3D" />
+        <circle cx="150" cy="18" r="4" fill="var(--color-lime)" />
       </svg>
     ),
   },
@@ -59,7 +59,7 @@ const BRANDS: Brand[] = [
     category: "Software Society · PMAS",
     svg: (
       <svg viewBox="0 0 180 36" className="h-6 sm:h-7 w-auto fill-current">
-        <polygon points="10,6 20,28 0,28" stroke="#C6FF3D" strokeWidth="2.5" fill="none" />
+        <polygon points="10,6 20,28 0,28" stroke="var(--color-lime)" strokeWidth="2.5" fill="none" />
         <text x="28" y="20" fontFamily="monospace" fontSize="14" fontWeight="bold" letterSpacing="0.1em">
           ARIDIAN
         </text>
@@ -75,7 +75,7 @@ const BRANDS: Brand[] = [
     svg: (
       <svg viewBox="0 0 160 36" className="h-6 sm:h-7 w-auto fill-current">
         <rect x="2" y="8" width="16" height="16" rx="3" stroke="currentColor" strokeWidth="2.2" fill="none" />
-        <rect x="7" y="13" width="6" height="6" fill="#C6FF3D" />
+        <rect x="7" y="13" width="6" height="6" fill="var(--color-lime)" />
         <text x="26" y="23" fontFamily="system-ui, sans-serif" fontSize="15" fontWeight="bold" letterSpacing="0.04em">
           SOFTWISE
         </text>
@@ -102,7 +102,7 @@ const BRANDS: Brand[] = [
         <text x="0" y="23" fontFamily="Georgia, serif" fontSize="19" fontStyle="italic" letterSpacing="0.04em">
           Studio Nine
         </text>
-        <text x="114" y="21" fontFamily="monospace" fontSize="11" fontWeight="bold" fill="#C6FF3D">
+        <text x="114" y="21" fontFamily="monospace" fontSize="11" fontWeight="bold" fill="var(--color-lime)">
           09
         </text>
       </svg>
@@ -114,7 +114,7 @@ const BRANDS: Brand[] = [
     svg: (
       <svg viewBox="0 0 160 36" className="h-6 sm:h-7 w-auto fill-current">
         <circle cx="12" cy="18" r="9" stroke="currentColor" strokeWidth="2.2" fill="none" />
-        <path d="M12 12 L12 24 M7 18 L17 18" stroke="#C6FF3D" strokeWidth="2" strokeLinecap="round" />
+        <path d="M12 12 L12 24 M7 18 L17 18" stroke="var(--color-lime)" strokeWidth="2" strokeLinecap="round" />
         <text x="28" y="23" fontFamily="system-ui, sans-serif" fontSize="15" fontWeight="bold" letterSpacing="0.06em">
           DRIVE TECH
         </text>
@@ -144,13 +144,13 @@ export default function BrandsMarquee() {
       <div
         className="pointer-events-none absolute inset-y-0 left-0 w-24 sm:w-40 z-10"
         style={{
-          background: "linear-gradient(to right, #0a0a0a, transparent)",
+          background: "linear-gradient(to right, var(--color-ink), transparent)",
         }}
       />
       <div
         className="pointer-events-none absolute inset-y-0 right-0 w-24 sm:w-40 z-10"
         style={{
-          background: "linear-gradient(to left, #0a0a0a, transparent)",
+          background: "linear-gradient(to left, var(--color-ink), transparent)",
         }}
       />
 

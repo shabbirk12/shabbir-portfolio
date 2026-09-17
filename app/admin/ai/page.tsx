@@ -15,14 +15,20 @@ const QUICK_ACTIONS = [
 export default function AICommandCenterPage() {
   const [prompt, setPrompt] = useState("");
   const [output, setOutput] = useState("");
+  const [history, setHistory] = useState<Array<{ prompt: string; output: string }>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
 
   async function handleGenerate() {
     if (!prompt.trim()) return;
+
+    // Save previous state to undo history
+    if (prompt || output) {
+      setHistory((prev) => [...prev, { prompt, output }]);
+    }
+
     setLoading(true);
-    setOutput("");
     setError("");
     setCopied(false);
 
@@ -43,6 +49,24 @@ export default function AICommandCenterPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleUndo() {
+    if (history.length === 0) return;
+    const previous = history[history.length - 1];
+    setHistory((prev) => prev.slice(0, -1));
+    setPrompt(previous.prompt);
+    setOutput(previous.output);
+    setError("");
+  }
+
+  function handleClear() {
+    if (prompt || output) {
+      setHistory((prev) => [...prev, { prompt, output }]);
+    }
+    setPrompt("");
+    setOutput("");
+    setError("");
   }
 
   async function handleCopy() {
@@ -103,7 +127,7 @@ export default function AICommandCenterPage() {
           />
         </div>
 
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-8 flex-wrap">
           <button
             type="button"
             onClick={handleGenerate}
@@ -112,11 +136,20 @@ export default function AICommandCenterPage() {
           >
             {loading ? "GENERATING…" : "✨ GENERATE WITH GEMINI"}
           </button>
-          {output && (
+          <button
+            type="button"
+            onClick={handleUndo}
+            disabled={history.length === 0}
+            className="rounded-full border border-line px-5 py-3 font-mono text-xs tracking-widest2 text-paper hover:border-lime hover:text-lime transition-colors disabled:opacity-30 disabled:pointer-events-none"
+            title={history.length > 0 ? `Undo previous change (${history.length} saved)` : "No previous edits to undo"}
+          >
+            ↩ UNDO {history.length > 0 && `(${history.length})`}
+          </button>
+          {(prompt || output) && (
             <button
               type="button"
-              onClick={() => setPrompt("")}
-              className="font-mono text-xs text-muted hover:text-paper transition-colors"
+              onClick={handleClear}
+              className="font-mono text-xs text-muted hover:text-paper transition-colors px-3 py-2"
             >
               CLEAR
             </button>
@@ -140,17 +173,28 @@ export default function AICommandCenterPage() {
                   GEMINI OUTPUT
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={handleCopy}
-                className={`font-mono text-xs px-4 py-1.5 rounded-full transition-all ${
-                  copied
-                    ? "bg-lime text-lime-ink"
-                    : "border border-line text-muted hover:border-lime hover:text-lime"
-                }`}
-              >
-                {copied ? "✓ COPIED!" : "COPY"}
-              </button>
+              <div className="flex items-center gap-2">
+                {history.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleUndo}
+                    className="font-mono text-xs px-3 py-1.5 rounded-full border border-line text-muted hover:border-lime hover:text-lime transition-colors"
+                  >
+                    ↩ UNDO
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className={`font-mono text-xs px-4 py-1.5 rounded-full transition-all ${
+                    copied
+                      ? "bg-lime text-lime-ink"
+                      : "border border-line text-muted hover:border-lime hover:text-lime"
+                  }`}
+                >
+                  {copied ? "✓ COPIED!" : "COPY"}
+                </button>
+              </div>
             </div>
             <div className="p-5 max-h-[560px] overflow-y-auto">
               <pre className="text-paper/90 text-sm leading-relaxed whitespace-pre-wrap font-body">

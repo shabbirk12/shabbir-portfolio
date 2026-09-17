@@ -5,7 +5,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root,
+[data-theme="dark"],
+.dark {
   --color-ink: #0a0a0a;
   --color-surface: #131313;
   --color-surface2: #1a1a1a;
@@ -17,7 +19,24 @@
   --color-mint: #c6ff3d;
   --color-mint-ink: #1c2600;
   --color-teal: #142805;
+  --accent-gradient: none;
   --font-script: "Instrument Serif", "Caveat", serif, cursive;
+}
+
+[data-theme="light"],
+.light {
+  --color-ink: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-surface2: #f0f0ee;
+  --color-line: #e2e4e8;
+  --color-paper: #111827;
+  --color-muted: #64748b;
+  --color-lime-ink: #ffffff;
+}
+
+[data-theme="light"] .grain-overlay,
+.light .grain-overlay {
+  opacity: 0.02;
 }
 
 @layer base {
@@ -29,7 +48,7 @@
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #242424 #0a0a0a;
+  scrollbar-color: var(--color-line) var(--color-ink);
 }
 
 html {
@@ -72,13 +91,14 @@ html.lenis body {
 }
 
 body {
-  background-color: #0a0a0a;
-  color: #f2f1ed;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 ::selection {
-  background: #c6ff3d;
-  color: #0a0a0a;
+  background: var(--color-lime);
+  color: var(--color-lime-ink);
 }
 
 /* Clean focus styling: remove rectangular outline box from all inputs and form fields */
@@ -105,7 +125,7 @@ button:focus-visible {
 
 /* Retain keyboard navigation outline only for accessible link tabs if tabbed */
 a:focus-visible {
-  outline: 1px dashed #c6ff3d;
+  outline: 1px dashed var(--color-lime);
   outline-offset: 3px;
 }
 
@@ -122,7 +142,7 @@ a:focus-visible {
   font-size: 0.68rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #8f9490;
+  color: var(--color-muted);
 }
 
 .section-frame {
@@ -133,9 +153,9 @@ a:focus-visible {
   position: absolute;
   width: 16px;
   height: 16px;
-  border-color: #c6ff3d;
+  border-color: var(--color-lime);
   opacity: 0.35;
-  transition: opacity 0.25s ease, width 0.25s ease, height 0.25s ease;
+  transition: opacity 0.25s ease, width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
 }
 
 .section-frame:hover .corner-bracket {
@@ -145,7 +165,7 @@ a:focus-visible {
 }
 
 .text-stroke {
-  -webkit-text-stroke: 1px #3a4340;
+  -webkit-text-stroke: 1px var(--color-line);
   color: transparent;
 }
 
@@ -162,7 +182,7 @@ a:focus-visible {
 }
 
 .glow-text {
-  text-shadow: 0 0 24px rgba(198,255,61, 0.55);
+  text-shadow: 0 0 24px var(--color-lime);
 }
 
 .card-glow {
@@ -170,8 +190,8 @@ a:focus-visible {
 }
 
 .card-glow:hover {
-  border-color: #c6ff3d;
-  box-shadow: 0 0 60px -12px rgba(198,255,61, 0.45);
+  border-color: var(--color-lime) !important;
+  box-shadow: 0 0 50px -10px var(--color-lime);
   transform: translateY(-3px);
 }
 
@@ -182,9 +202,9 @@ a:focus-visible {
 }
 
 .fill-hover:hover {
-  background-color: #c6ff3d;
-  border-color: #c6ff3d;
-  color: #1c2600;
+  background-color: var(--color-lime);
+  border-color: var(--color-lime);
+  color: var(--color-lime-ink);
 }
 
 .fill-hover .fill-fade {
@@ -192,19 +212,20 @@ a:focus-visible {
 }
 
 .fill-hover:hover .fill-fade {
-  color: #1c2600;
+  color: var(--color-lime-ink);
 }
 
 .fill-hover:hover .fill-muted {
-  color: #2e3d05;
+  color: var(--color-lime-ink);
+  opacity: 0.8;
 }
 
 .ambient-blob {
   position: absolute;
   border-radius: 9999px;
   filter: blur(100px);
-  opacity: 0.7;
-  background: radial-gradient(circle, rgba(198,255,61, 0.18), rgba(20, 30, 5, 0.08) 60%, transparent 75%);
+  opacity: 0.2;
+  background: radial-gradient(circle, var(--color-lime) 0%, transparent 70%);
 }
 
 .underline-sweep {
@@ -218,14 +239,70 @@ a:focus-visible {
   bottom: -2px;
   width: 100%;
   height: 1px;
-  background: #c6ff3d;
+  background: var(--color-lime);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .underline-sweep:hover::after {
   transform: scaleX(1);
+}
+
+/* ── UNIVERSAL ACCENT & HOVER UNIFORMITY ── */
+.text-lime, .text-mint {
+  color: var(--color-lime) !important;
+}
+
+.border-lime, .border-mint {
+  border-color: var(--color-lime) !important;
+}
+
+.bg-lime, .bg-mint {
+  background-color: var(--color-lime) !important;
+  color: var(--color-lime-ink) !important;
+}
+
+.hover\:text-lime:hover, .hover\:text-mint:hover {
+  color: var(--color-lime) !important;
+}
+
+.hover\:border-lime:hover, .hover\:border-mint:hover {
+  border-color: var(--color-lime) !important;
+}
+
+.hover\:bg-lime:hover, .hover\:bg-mint:hover {
+  background-color: var(--color-lime) !important;
+  color: var(--color-lime-ink) !important;
+}
+
+.group:hover .group-hover\:text-lime,
+.group:hover .group-hover\:text-mint {
+  color: var(--color-lime) !important;
+}
+
+.group:hover .group-hover\:border-lime,
+.group:hover .group-hover\:border-mint {
+  border-color: var(--color-lime) !important;
+}
+
+.shadow-glow-lime,
+.hover\:shadow-glow-lime:hover {
+  box-shadow: 0 0 30px -6px var(--color-lime) !important;
+}
+
+/* When an accent gradient is set */
+.has-gradient .bg-lime,
+.accent-gradient {
+  background: var(--accent-gradient, var(--color-lime)) !important;
+  color: var(--color-lime-ink) !important;
+}
+
+.has-gradient .text-lime.glow-text,
+.accent-gradient-text {
+  background: var(--accent-gradient, var(--color-lime)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 /* ── PRINT STYLES ── Keep resume clean and visible when printing */
