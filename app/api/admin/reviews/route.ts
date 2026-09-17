@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   if (!hasValidSession()) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   try {
     const body = await req.json();
-    const { name, role, company, rating, content, status } = body;
+    const { name, role, company, rating, content, logo_url, status } = body;
     if (!name || !content) {
       return NextResponse.json({ error: "Name and review content are required." }, { status: 400 });
     }
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       company,
       rating: rating || 5,
       content,
+      logo_url,
       status: status || "approved",
     });
     return NextResponse.json({ ok: true, review });

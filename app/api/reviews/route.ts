@@ -15,7 +15,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, role, company, rating, content } = body;
+    const { name, role, company, rating, content, logo_url } = body;
 
     if (!name || typeof name !== "string" || name.trim().length === 0) {
       return NextResponse.json({ error: "Your name is required." }, { status: 400 });
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
       company: company ? String(company).trim() : null,
       rating: typeof rating === "number" ? rating : 5,
       content: content.trim(),
+      logo_url: logo_url ? String(logo_url).trim() : null,
       status: "pending",
     });
 

@@ -227,3 +227,52 @@ a:focus-visible {
 .underline-sweep:hover::after {
   transform: scaleX(1);
 }
+
+/* ── PRINT STYLES ── Keep resume clean and visible when printing */
+@media print {
+  /* Force white background + black text site-wide */
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide everything except the resume article */
+  header.print\:hidden,
+  #hud-bar,
+  nav,
+  .grain-overlay,
+  .ambient-blob,
+  .custom-cursor,
+  [data-cursor] {
+    display: none !important;
+  }
+
+  /* Reset padding/margin on page container */
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  article {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 1in 0.75in !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Links print legibly */
+  a {
+    color: #1a56db !important;
+    text-decoration: underline !important;
+  }
+
+  /* Make sure hr lines print */
+  hr {
+    border-color: #000000 !important;
+  }
+}

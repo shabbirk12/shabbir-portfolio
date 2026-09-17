@@ -81,6 +81,7 @@ export default async function AdminDashboard() {
           {[
             { href: "/admin/reviews", label: "Client Reviews", desc: "Moderate testimonials & approve client feedback" },
             { href: "/admin/blogs", label: "Blog Posts & AI", desc: "Write articles & draft with Gemini AI" },
+            { href: "/admin/ai", label: "✨ AI Command Center", desc: "Command Gemini to draft copy, blogs, captions & more" },
             { href: "/admin/settings", label: "Site Settings", desc: "Colors, gradients, Gemini API key & branding" },
             { href: "/admin/content/services", label: "Services", desc: "The rows in the Services section" },
             { href: "/admin/content/skills", label: "Skills / Tools", desc: "The scrolling ticker under the hero" },

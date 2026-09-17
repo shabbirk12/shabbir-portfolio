@@ -8,6 +8,7 @@ import Toolkit from "@/components/Toolkit";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
 import Lab from "@/components/Lab";
+import BrandsMarquee from "@/components/BrandsMarquee";
 import Reviews from "@/components/Reviews";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -42,6 +43,7 @@ export default async function Home() {
       <Services services={services} />
       <Work />
       <Lab />
+      <BrandsMarquee />
       <Reviews initialReviews={reviews} />
       <Contact />
       <Footer />

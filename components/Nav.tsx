@@ -10,10 +10,9 @@ const links = [
   { n: "01", id: "about", label: "ABOUT", href: "/#about" },
   { n: "02", id: "services", label: "SERVICES", href: "/#services" },
   { n: "03", id: "work", label: "WORK", href: "/#work" },
-  { n: "04", id: "reviews", label: "REVIEWS", href: "/#reviews" },
+  { n: "04", id: "testimonials", label: "TESTIMONIALS", href: "/#testimonials" },
   { n: "05", id: "blog", label: "BLOG", href: "/blog" },
-  { n: "06", id: "cv", label: "CV", href: "/cv" },
-  { n: "07", id: "contact", label: "CONTACT", href: "/#contact" },
+  { n: "06", id: "contact", label: "CONTACT", href: "/#contact" },
 ];
 
 export default function Nav() {
@@ -81,10 +80,14 @@ export default function Nav() {
     return () => document.removeEventListener("click", handleGlobalClick);
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, l: (typeof links)[number] | { href: string; id: string }) => {
+    if (!l.href.startsWith("/#") && !l.href.startsWith("#")) {
+      // Standalone page (like /blog) — let standard navigation take place
+      return;
+    }
     if (typeof window !== "undefined" && window.location.pathname === "/") {
       e.preventDefault();
-      const target = document.getElementById(id);
+      const target = document.getElementById(l.id);
       if (target) {
         const lenis = (window as any).__lenis;
         if (lenis) {
@@ -125,7 +128,7 @@ export default function Nav() {
             <a
               key={l.n}
               href={l.href}
-              onClick={(e) => handleNavClick(e, l.id)}
+              onClick={(e) => handleNavClick(e, l)}
               className={`underline-sweep transition-colors ${
                 isActive ? "text-lime" : "hover:text-lime"
               }`}
@@ -138,7 +141,7 @@ export default function Nav() {
         })}
         <a
           href="/#contact"
-          onClick={(e) => handleNavClick(e, "contact")}
+          onClick={(e) => handleNavClick(e, { id: "contact", href: "/#contact" })}
           className="rounded-full bg-lime text-lime-ink px-5 py-2 font-mono text-[0.65rem] tracking-widest2
                      hover:shadow-glow-lime transition-shadow"
         >
@@ -170,7 +173,7 @@ export default function Nav() {
                 href={l.href}
                 onClick={(e) => {
                   setOpen(false);
-                  handleNavClick(e, l.id);
+                  handleNavClick(e, l);
                 }}
                 className="font-mono text-sm tracking-widest2 text-muted hover:text-lime"
               >
@@ -181,7 +184,7 @@ export default function Nav() {
               href="/#contact"
               onClick={(e) => {
                 setOpen(false);
-                handleNavClick(e, "contact");
+                handleNavClick(e, { id: "contact", href: "/#contact" });
               }}
               className="rounded-full bg-lime text-lime-ink px-5 py-3 text-center font-mono text-xs tracking-widest2"
             >

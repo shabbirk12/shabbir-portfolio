@@ -333,10 +333,12 @@ export default function Contact() {
               </a>
               <span className="hidden sm:block text-line">·</span>
               <a
-                href={`mailto:${profile.email}`}
+                href="https://instagram.com/shabbirk.design"
+                target="_blank"
+                rel="noreferrer"
                 className="hover:text-lime transition-colors text-muted"
               >
-                EMAIL ↗
+                INSTAGRAM ↗
               </a>
             </div>
           </div>

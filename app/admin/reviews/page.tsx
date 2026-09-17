@@ -16,6 +16,7 @@ export default function AdminReviewsPage() {
   const [company, setCompany] = useState("");
   const [rating, setRating] = useState(5);
   const [content, setContent] = useState("");
+  const [logoUrl, setLogoUrl] = useState("");
   const [addMsg, setAddMsg] = useState("");
 
   async function loadReviews() {
@@ -57,7 +58,7 @@ export default function AdminReviewsPage() {
       const res = await fetch("/api/admin/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, role, company, rating, content, status: "approved" }),
+        body: JSON.stringify({ name, role, company, rating, content, logo_url: logoUrl, status: "approved" }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -66,6 +67,7 @@ export default function AdminReviewsPage() {
         setRole("");
         setCompany("");
         setContent("");
+        setLogoUrl("");
         setRating(5);
         setShowAddForm(false);
         loadReviews();
@@ -134,7 +136,7 @@ export default function AdminReviewsPage() {
         {showAddForm && (
           <form onSubmit={handleAddReview} className="mb-10 p-6 border border-line bg-surface/60 rounded-lg flex flex-col gap-4">
             <h3 className="font-display text-lg uppercase text-paper">Create Approved Testimonial</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <input
                 required
                 value={name}
@@ -152,6 +154,12 @@ export default function AdminReviewsPage() {
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 placeholder="Company / Client Name"
+                className="bg-transparent border-b border-line py-2 text-sm text-paper focus:border-lime"
+              />
+              <input
+                value={logoUrl}
+                onChange={(e) => setLogoUrl(e.target.value)}
+                placeholder="Logo URL (optional)"
                 className="bg-transparent border-b border-line py-2 text-sm text-paper focus:border-lime"
               />
             </div>
@@ -217,13 +225,26 @@ export default function AdminReviewsPage() {
                     &ldquo;{r.content}&rdquo;
                   </p>
 
-                  <div className="flex items-center gap-2 font-mono text-xs text-paper">
-                    <span className="font-bold">{r.name}</span>
-                    {(r.role || r.company) && (
-                      <span className="text-muted">
-                        · {r.role} {r.company ? `(${r.company})` : ""}
-                      </span>
+                  <div className="flex items-center gap-3">
+                    {r.logo_url ? (
+                      <img
+                        src={r.logo_url}
+                        alt={r.name}
+                        className="w-9 h-9 rounded-full object-cover border border-line/80 bg-surface shrink-0"
+                      />
+                    ) : (
+                      <div className="w-9 h-9 rounded-full bg-lime/10 border border-lime/30 text-lime font-mono text-xs flex items-center justify-center font-bold shrink-0">
+                        {r.name.slice(0, 2).toUpperCase()}
+                      </div>
                     )}
+                    <div className="font-mono text-xs text-paper">
+                      <span className="font-bold">{r.name}</span>
+                      {(r.role || r.company) && (
+                        <span className="text-muted block text-[0.68rem] mt-0.5">
+                          {r.role} {r.company ? `(${r.company})` : ""}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 

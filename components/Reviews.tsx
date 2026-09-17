@@ -12,6 +12,7 @@ export default function Reviews({ initialReviews = [] }: { initialReviews?: Revi
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [company, setCompany] = useState("");
+  const [logoUrl, setLogoUrl] = useState("");
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submittedMessage, setSubmittedMessage] = useState("");
@@ -35,7 +36,7 @@ export default function Reviews({ initialReviews = [] }: { initialReviews?: Revi
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, role, company, rating, content }),
+        body: JSON.stringify({ name, role, company, rating, content, logo_url: logoUrl }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -49,6 +50,7 @@ export default function Reviews({ initialReviews = [] }: { initialReviews?: Revi
       setName("");
       setRole("");
       setCompany("");
+      setLogoUrl("");
       setContent("");
       setRating(5);
     } catch {
@@ -59,7 +61,8 @@ export default function Reviews({ initialReviews = [] }: { initialReviews?: Revi
   }
 
   return (
-    <section id="reviews" className="px-6 md:px-10 py-24 md:py-32 border-t border-line relative overflow-hidden">
+    <section id="testimonials" className="px-6 md:px-10 py-24 md:py-32 border-t border-line relative overflow-hidden">
+      <span id="reviews" className="absolute -top-20" aria-hidden="true" />
       {/* Ambient glow */}
       <div className="ambient-blob w-[450px] h-[450px] -top-20 -right-20 opacity-20 pointer-events-none" aria-hidden="true" />
 
@@ -121,19 +124,32 @@ export default function Reviews({ initialReviews = [] }: { initialReviews?: Revi
 
             {/* Author Footer */}
             <div className="pt-4 border-t border-line/60 flex items-center justify-between">
-              <div>
-                <p className="font-display text-sm font-semibold uppercase text-paper group-hover:text-lime transition-colors">
-                  {r.name}
-                </p>
-                {(r.role || r.company) && (
-                  <p className="font-mono text-[0.65rem] tracking-wider text-muted mt-0.5">
-                    {r.role}
-                    {r.role && r.company ? " · " : ""}
-                    {r.company}
-                  </p>
+              <div className="flex items-center gap-3">
+                {r.logo_url ? (
+                  <img
+                    src={r.logo_url}
+                    alt={r.name}
+                    className="w-10 h-10 rounded-full object-cover border border-line/80 bg-surface shrink-0"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-lime/10 border border-lime/30 text-lime font-mono text-xs flex items-center justify-center font-bold shrink-0">
+                    {r.name.slice(0, 2).toUpperCase()}
+                  </div>
                 )}
+                <div>
+                  <p className="font-display text-sm font-semibold uppercase text-paper group-hover:text-lime transition-colors">
+                    {r.name}
+                  </p>
+                  {(r.role || r.company) && (
+                    <p className="font-mono text-[0.65rem] tracking-wider text-muted mt-0.5">
+                      {r.role}
+                      {r.role && r.company ? " · " : ""}
+                      {r.company}
+                    </p>
+                  )}
+                </div>
               </div>
-              <span className="font-mono text-[0.6rem] text-muted/60 tracking-widest2 uppercase">
+              <span className="font-mono text-[0.6rem] text-muted/60 tracking-widest2 uppercase self-start mt-1 shrink-0">
                 {new Date(r.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
               </span>
             </div>
@@ -250,6 +266,17 @@ export default function Reviews({ initialReviews = [] }: { initialReviews?: Revi
                       />
                     </label>
                   </div>
+
+                  {/* Company Logo / Avatar URL */}
+                  <label className="flex flex-col gap-1">
+                    <span className="font-mono text-[0.65rem] tracking-widest2 text-muted uppercase">COMPANY LOGO OR AVATAR URL (OPTIONAL)</span>
+                    <input
+                      value={logoUrl}
+                      onChange={(e) => setLogoUrl(e.target.value)}
+                      placeholder="https://example.com/logo.png"
+                      className="bg-ink border-b border-line py-2 px-1 text-sm text-paper placeholder:text-muted/40 focus:border-lime transition-colors"
+                    />
+                  </label>
 
                   {/* Review text */}
                   <label className="flex flex-col gap-1">

@@ -8,6 +8,7 @@ export type Review = {
   company: string | null;
   rating: number;
   content: string;
+  logo_url?: string | null;
   status: "pending" | "approved" | "rejected";
   created_at: string;
 };
@@ -15,7 +16,7 @@ export type Review = {
 export async function getApprovedReviews(): Promise<Review[]> {
   try {
     const rows = await query<Review>(
-      "SELECT id, name, role, company, rating, content, status, created_at FROM reviews WHERE status = 'approved' ORDER BY created_at DESC"
+      "SELECT id, name, role, company, rating, content, logo_url, status, created_at FROM reviews WHERE status = 'approved' ORDER BY created_at DESC"
     );
     return rows;
   } catch (err) {
@@ -27,7 +28,7 @@ export async function getApprovedReviews(): Promise<Review[]> {
 export async function getAllReviews(): Promise<Review[]> {
   try {
     const rows = await query<Review>(
-      "SELECT id, name, role, company, rating, content, status, created_at FROM reviews ORDER BY created_at DESC"
+      "SELECT id, name, role, company, rating, content, logo_url, status, created_at FROM reviews ORDER BY created_at DESC"
     );
     return rows;
   } catch (err) {
@@ -42,21 +43,23 @@ export async function createReview(data: {
   company?: string | null;
   rating?: number;
   content: string;
+  logo_url?: string | null;
   status?: "pending" | "approved";
 }): Promise<Review> {
   const rating = Math.min(5, Math.max(1, data.rating || 5));
   const status = data.status || "pending";
 
   const rows = await query<Review>(
-    `INSERT INTO reviews (name, role, company, rating, content, status)
-     VALUES ($1, $2, $3, $4, $5, $6)
-     RETURNING id, name, role, company, rating, content, status, created_at`,
+    `INSERT INTO reviews (name, role, company, rating, content, logo_url, status)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
+     RETURNING id, name, role, company, rating, content, logo_url, status, created_at`,
     [
       data.name.trim(),
       data.role?.trim() || null,
       data.company?.trim() || null,
       rating,
       data.content.trim(),
+      data.logo_url?.trim() || null,
       status,
     ]
   );

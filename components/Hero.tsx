@@ -357,10 +357,10 @@ export default function Hero() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
               <Link
-                href="/cv"
+                href="/resume"
                 className="group inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-[#C6FF3D] hover:text-[#C6FF3D]"
               >
-                View CV ↗
+                Resume ↗
               </Link>
             </div>
           </div>
