@@ -12,25 +12,30 @@ const QUICK_ACTIONS = [
   { label: "Service Description", prompt: "Write a professional, conversion-focused service description for a portfolio website. Service: " },
 ];
 
+interface HistoryItem {
+  prompt: string;
+  output: string;
+}
+
 export default function AICommandCenterPage() {
   const [prompt, setPrompt] = useState("");
   const [output, setOutput] = useState("");
-  const [history, setHistory] = useState<Array<{ prompt: string; output: string }>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
 
+  // Undo / Redo history stacks
+  const [undoStack, setUndoStack] = useState<HistoryItem[]>([]);
+  const [redoStack, setRedoStack] = useState<HistoryItem[]>([]);
+
   async function handleGenerate() {
     if (!prompt.trim()) return;
-
-    // Save previous state to undo history
-    if (prompt || output) {
-      setHistory((prev) => [...prev, { prompt, output }]);
-    }
-
     setLoading(true);
     setError("");
     setCopied(false);
+
+    // Save current state before new generation so user can undo
+    const snapshot: HistoryItem = { prompt, output };
 
     try {
       const res = await fetch("/api/admin/gemini", {
@@ -43,6 +48,8 @@ export default function AICommandCenterPage() {
         setError(data.error || "Failed to generate.");
         return;
       }
+      setUndoStack((prev) => [...prev, snapshot]);
+      setRedoStack([]);
       setOutput(data.text || "");
     } catch {
       setError("Network error — please try again.");
@@ -52,20 +59,24 @@ export default function AICommandCenterPage() {
   }
 
   function handleUndo() {
-    if (history.length === 0) return;
-    const previous = history[history.length - 1];
-    setHistory((prev) => prev.slice(0, -1));
-    setPrompt(previous.prompt);
-    setOutput(previous.output);
+    if (undoStack.length === 0) return;
+    const currentState: HistoryItem = { prompt, output };
+    const prev = undoStack[undoStack.length - 1];
+    setUndoStack((stack) => stack.slice(0, stack.length - 1));
+    setRedoStack((stack) => [...stack, currentState]);
+    setPrompt(prev.prompt);
+    setOutput(prev.output);
     setError("");
   }
 
-  function handleClear() {
-    if (prompt || output) {
-      setHistory((prev) => [...prev, { prompt, output }]);
-    }
-    setPrompt("");
-    setOutput("");
+  function handleRedo() {
+    if (redoStack.length === 0) return;
+    const currentState: HistoryItem = { prompt, output };
+    const next = redoStack[redoStack.length - 1];
+    setRedoStack((stack) => stack.slice(0, stack.length - 1));
+    setUndoStack((stack) => [...stack, currentState]);
+    setPrompt(next.prompt);
+    setOutput(next.output);
     setError("");
   }
 
@@ -127,7 +138,7 @@ export default function AICommandCenterPage() {
           />
         </div>
 
-        <div className="flex items-center gap-3 mb-8 flex-wrap">
+        <div className="flex items-center flex-wrap gap-3 mb-8">
           <button
             type="button"
             onClick={handleGenerate}
@@ -136,20 +147,38 @@ export default function AICommandCenterPage() {
           >
             {loading ? "GENERATING…" : "✨ GENERATE WITH GEMINI"}
           </button>
-          <button
-            type="button"
-            onClick={handleUndo}
-            disabled={history.length === 0}
-            className="rounded-full border border-line px-5 py-3 font-mono text-xs tracking-widest2 text-paper hover:border-lime hover:text-lime transition-colors disabled:opacity-30 disabled:pointer-events-none"
-            title={history.length > 0 ? `Undo previous change (${history.length} saved)` : "No previous edits to undo"}
-          >
-            ↩ UNDO {history.length > 0 && `(${history.length})`}
-          </button>
+
+          {undoStack.length > 0 && (
+            <button
+              type="button"
+              onClick={handleUndo}
+              className="rounded-full border border-lime/60 bg-lime/10 px-5 py-3 font-mono text-xs tracking-widest2 text-lime hover:bg-lime hover:text-lime-ink transition-all flex items-center gap-1.5"
+              title="Undo last change"
+            >
+              <span>↩</span> UNDO
+            </button>
+          )}
+
+          {redoStack.length > 0 && (
+            <button
+              type="button"
+              onClick={handleRedo}
+              className="rounded-full border border-line px-5 py-3 font-mono text-xs tracking-widest2 text-muted hover:text-paper hover:border-paper transition-all flex items-center gap-1.5"
+              title="Redo previous change"
+            >
+              <span>↪</span> REDO
+            </button>
+          )}
+
           {(prompt || output) && (
             <button
               type="button"
-              onClick={handleClear}
-              className="font-mono text-xs text-muted hover:text-paper transition-colors px-3 py-2"
+              onClick={() => {
+                setUndoStack((prev) => [...prev, { prompt, output }]);
+                setPrompt("");
+                setOutput("");
+              }}
+              className="font-mono text-xs text-muted hover:text-paper transition-colors ml-auto"
             >
               CLEAR
             </button>
@@ -174,11 +203,12 @@ export default function AICommandCenterPage() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                {history.length > 0 && (
+                {undoStack.length > 0 && (
                   <button
                     type="button"
                     onClick={handleUndo}
-                    className="font-mono text-xs px-3 py-1.5 rounded-full border border-line text-muted hover:border-lime hover:text-lime transition-colors"
+                    className="font-mono text-xs px-3 py-1.5 rounded-full border border-line text-muted hover:text-lime hover:border-lime transition-all"
+                    title="Undo this generation"
                   >
                     ↩ UNDO
                   </button>

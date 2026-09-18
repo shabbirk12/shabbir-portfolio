@@ -5,17 +5,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0a0a0a",
-        surface: "#131313",
-        surface2: "#1a1a1a",
-        line: "#242424",
-        paper: "#f2f1ed",
-        muted: "#8f9490",
-        mint: "#c6ff3d",       // unified to match lime — secondary = primary
-        "mint-ink": "#1c2600", // updated to match lime-ink
-        lime: "#c6ff3d",
-        "lime-ink": "#1c2600",
-        teal: "#142805",       // dark lime teal, was teal-cyan
+        ink: "rgb(var(--color-ink-rgb, 10 10 10) / <alpha-value>)",
+        surface: "var(--color-surface, #131313)",
+        surface2: "var(--color-surface2, #1a1a1a)",
+        line: "var(--color-line, #242424)",
+        paper: "rgb(var(--color-paper-rgb, 242 241 237) / <alpha-value>)",
+        muted: "var(--color-muted, #8f9490)",
+        mint: "rgb(var(--color-lime-rgb, 198 255 61) / <alpha-value>)",
+        "mint-ink": "var(--color-lime-ink, #1c2600)",
+        lime: "rgb(var(--color-lime-rgb, 198 255 61) / <alpha-value>)",
+        "lime-ink": "var(--color-lime-ink, #1c2600)",
+        teal: "var(--color-teal, #142805)",
       },
       fontFamily: {
         display: ["General Sans", "sans-serif"],
@@ -51,9 +51,9 @@ const config: Config = {
         },
       },
       boxShadow: {
-        glow: "0 0 60px -12px rgba(198,255,61,0.45)",
-        "glow-sm": "0 0 24px -8px rgba(198,255,61,0.5)",
-        "glow-lime": "0 0 24px -8px rgba(198,255,61,0.55)",
+        glow: "0 0 60px -12px var(--color-lime-glow, rgba(198,255,61,0.45))",
+        "glow-sm": "0 0 24px -8px var(--color-lime-glow, rgba(198,255,61,0.5))",
+        "glow-lime": "0 0 24px -8px var(--color-lime-glow, rgba(198,255,61,0.55))",
       },
     },
   },

@@ -70,7 +70,7 @@ export default function Reviews({ initialReviews = [] }: { initialReviews?: Revi
         <Reveal>
           <p className="eyebrow mb-3">04 / CLIENT VOICES &amp; TRUST</p>
           <h2 className="font-display text-4xl sm:text-5xl md:text-7xl uppercase leading-none">
-            Client <span className="font-script italic text-lime text-5xl sm:text-6xl md:text-8xl lowercase glow-text">reviews.</span>
+            Client <span className="font-script italic text-lime text-5xl sm:text-6xl md:text-8xl lowercase">reviews.</span>
           </h2>
         </Reveal>
 

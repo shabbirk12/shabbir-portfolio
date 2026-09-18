@@ -31,7 +31,7 @@ export default async function BlogIndexPage() {
         <Reveal className="mb-16 border-b border-line pb-12">
           <p className="eyebrow mb-3">06 / THOUGHTS &amp; ARCHITECTURE</p>
           <h1 className="font-display text-5xl sm:text-7xl md:text-8xl uppercase leading-none text-paper mb-6">
-            Articles &amp; <span className="font-script italic text-lime lowercase text-6xl sm:text-8xl md:text-9xl glow-text">insights.</span>
+            Articles &amp; <span className="font-script italic text-lime lowercase text-6xl sm:text-8xl md:text-9xl">insights.</span>
           </h1>
           <p className="text-muted text-base sm:text-lg max-w-2xl leading-relaxed">
             Observations from the intersection of graphic design, creative engineering, and production web systems.

@@ -170,7 +170,7 @@ export default function Contact() {
         <h2 className="font-display text-5xl md:text-8xl uppercase leading-[0.95]">Got a project</h2>
         <h2 className="font-display text-5xl md:text-8xl uppercase leading-[0.95] flex flex-wrap items-baseline justify-center gap-x-4 md:gap-x-6">
           in mind?
-          <span className="font-script text-lime normal-case text-6xl md:text-9xl glow-text italic">
+          <span className="font-script text-lime normal-case text-6xl md:text-9xl italic">
             let&apos;s talk.
           </span>
         </h2>

@@ -21,7 +21,7 @@ export default function Spotlight() {
       className="pointer-events-none fixed inset-0 z-0 hidden md:block"
       style={{
         background:
-          "radial-gradient(560px circle at var(--x, 50%) var(--y, 20%), color-mix(in srgb, var(--color-lime, #c6ff3d) 8%, transparent), transparent 65%)",
+          "radial-gradient(560px circle at var(--x, 50%) var(--y, 20%), rgba(195,255,252,0.09), transparent 65%)",
       }}
     />
   );

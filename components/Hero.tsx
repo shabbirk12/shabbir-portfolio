@@ -260,11 +260,19 @@ const InvertedCursor: React.FC<{ containerRef: React.RefObject<HTMLElement> }> =
 /* -------------------------------------------------------------------------
  * Hero
  * ---------------------------------------------------------------------- */
-const ACCENT = "#C6FF3D";
+const DEFAULT_ACCENT = "#c6ff3d";
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const [loaded, setLoaded] = useState(false);
+  const [accent, setAccent] = useState(DEFAULT_ACCENT);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const c = getComputedStyle(document.documentElement).getPropertyValue("--color-lime").trim();
+      if (c) setAccent(c);
+    }
+  }, []);
 
   const scrollTo = (href: string) => {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
@@ -278,10 +286,10 @@ export default function Hero() {
         ref={heroRef}
         id="top"
         data-hide-cursor
-        className="relative min-h-screen w-full overflow-hidden bg-ink text-paper transition-colors duration-300"
+        className="relative min-h-screen w-full overflow-hidden bg-ink text-paper"
       >
         {/* Liquid halftone dot field */}
-        <HalftoneField accent="var(--color-lime, #c6ff3d)" />
+        <HalftoneField accent={accent} />
 
         {/* Inverted-color circle following the cursor */}
         <InvertedCursor containerRef={heroRef} />
@@ -304,8 +312,8 @@ export default function Hero() {
               aria-hidden="true"
             />
 
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-lime animate-pulse" />
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/50">
+              <span className="h-1.5 w-1.5 rounded-full bg-lime" />
               Available for freelance — Islamabad
             </span>
 
@@ -319,7 +327,7 @@ export default function Hero() {
               text="Brand identity, print & packaging, and websites that actually ship."
               animateBy="words"
               delay={45}
-              className="mt-6 max-w-xl justify-center px-4 font-sans text-sm text-muted sm:text-base"
+              className="mt-6 max-w-xl justify-center px-4 font-sans text-sm text-paper/50 sm:text-base"
             />
           </div>
 
@@ -330,7 +338,7 @@ export default function Hero() {
               <div className="font-display text-6xl font-bold leading-none tracking-tight text-lime sm:text-7xl">
                 100%
               </div>
-              <p className="mt-2 font-sans text-sm leading-snug text-muted">
+              <p className="mt-2 font-sans text-sm leading-snug text-paper/50">
                 Hands-on, start to finish. I help brands and founders in
                 Islamabad turn rough ideas into identities and interfaces
                 people trust.
@@ -344,21 +352,21 @@ export default function Hero() {
             <div className="flex flex-wrap gap-3 md:justify-end">
               <button
                 onClick={() => scrollTo("#work")}
-                className="group inline-flex items-center gap-2 rounded-full bg-lime text-lime-ink px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5 hover:shadow-glow-lime"
+                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition-transform hover:-translate-y-0.5"
               >
                 See the Work
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </button>
               <button
                 onClick={() => scrollTo("#contact")}
-                className="group inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-lime hover:text-lime"
+                className="group inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-lime hover:text-lime"
               >
                 Let&apos;s Build
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
               <Link
                 href="/resume"
-                className="group inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-lime hover:text-lime"
+                className="group inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-lime hover:text-lime"
               >
                 Resume ↗
               </Link>

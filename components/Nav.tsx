@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import useActiveSection from "@/lib/useActiveSection";
-import ThemeToggle from "@/components/ThemeToggle";
 
 const links = [
   { n: "01", id: "about", label: "ABOUT", href: "/#about" },
@@ -140,7 +139,6 @@ export default function Nav() {
             </a>
           );
         })}
-        <ThemeToggle />
         <a
           href="/#contact"
           onClick={(e) => handleNavClick(e, { id: "contact", href: "/#contact" })}
@@ -151,17 +149,14 @@ export default function Nav() {
         </a>
       </nav>
 
-      <div className="flex md:hidden items-center gap-2">
-        <ThemeToggle compact />
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="font-mono text-[0.68rem] tracking-widest2 border border-line px-3 py-2 hover:border-lime transition-colors"
-          aria-expanded={open}
-          aria-label="Toggle menu"
-        >
-          {open ? "CLOSE" : "MENU"}
-        </button>
-      </div>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="md:hidden font-mono text-[0.68rem] tracking-widest2 border border-line px-3 py-2 hover:border-lime transition-colors"
+        aria-expanded={open}
+        aria-label="Toggle menu"
+      >
+        {open ? "CLOSE" : "MENU"}
+      </button>
 
       <AnimatePresence>
         {open && (
@@ -185,10 +180,6 @@ export default function Nav() {
                 {l.n}/{l.label}
               </a>
             ))}
-            <div className="pt-2 border-t border-line flex items-center justify-between">
-              <span className="font-mono text-xs text-muted">COLOR MODE</span>
-              <ThemeToggle />
-            </div>
             <a
               href="/#contact"
               onClick={(e) => {

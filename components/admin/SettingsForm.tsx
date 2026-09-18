@@ -250,12 +250,17 @@ export default function SettingsForm({
     setSecondaryColor(preset.primary); // enforce 3-color uniformity
     setBgColor(preset.bg);
     setTextColor(preset.text);
-    setColorMsg(`Selected preset: "${preset.name}". Click SAVE COLORS to apply.`);
+    setAccentGradient(""); // Clear gradient so solid color applies uniformly
+    setColorMsg(`Selected preset: "${preset.name}" (Solid color). Click SAVE COLORS to apply.`);
   }
 
   function applyGradient(grad: string) {
     setAccentGradient(grad);
-    setColorMsg("Gradient selected! Click SAVE COLORS to apply.");
+    if (grad) {
+      setColorMsg("Gradient selected! Click SAVE COLORS to apply.");
+    } else {
+      setColorMsg("Gradient removed! Normal solid color will be applied. Click SAVE COLORS to apply.");
+    }
   }
 
   async function resetColors() {
@@ -389,11 +394,26 @@ export default function SettingsForm({
 
         {/* GRADIENT ACCENT OPTIONS */}
         <div className="mb-6 p-4 border border-line rounded bg-surface/50">
-          <span className="font-mono text-[0.65rem] tracking-widest2 text-lime block mb-2">
-            GRADIENT OPTIONS (APPLIED TO ACCENTS &amp; HIGHLIGHTS)
-          </span>
+          <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <span className="font-mono text-[0.65rem] tracking-widest2 text-lime uppercase">
+              GRADIENT OPTIONS (APPLIED TO BUTTONS &amp; HIGHLIGHTS)
+            </span>
+            {accentGradient ? (
+              <button
+                type="button"
+                onClick={() => applyGradient("")}
+                className="font-mono text-[0.65rem] tracking-wider text-muted hover:text-red-400 border border-line px-2.5 py-1 rounded"
+              >
+                ✕ REMOVE GRADIENT (USE NORMAL COLOR)
+              </button>
+            ) : (
+              <span className="font-mono text-[0.65rem] tracking-wider text-lime/80 bg-lime/10 px-2.5 py-0.5 rounded">
+                NORMAL COLOR ACTIVE
+              </span>
+            )}
+          </div>
           <p className="text-muted text-xs mb-3">
-            Choose a gradient preset below or type a custom CSS linear-gradient:
+            Choose a gradient preset below, or select &quot;Solid (No Gradient)&quot; to use your normal primary color sitewide:
           </p>
           <div className="flex flex-wrap gap-2 mb-4">
             {GRADIENT_PRESETS.map((g) => {

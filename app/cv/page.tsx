@@ -1,6 +1,2 @@
-import { redirect } from "next/navigation";
-
-export default function CVPage() {
-  redirect("/resume");
-}
+export { default } from "@/app/resume/page";
 

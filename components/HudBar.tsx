@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import useActiveSection from "@/lib/useActiveSection";
-import ThemeToggle from "@/components/ThemeToggle";
 
 function useLondonClock() {
   const [time, setTime] = useState("--:--:--");
@@ -67,6 +66,14 @@ export default function HudBar({ section }: { section?: string }) {
   const progress = useScrollProgress();
   const cursor = useCursor();
   const active = useActiveSection();
+  const [themeColor, setThemeColor] = useState("#C6FF3D");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const c = getComputedStyle(document.documentElement).getPropertyValue("--color-lime").trim();
+      if (c) setThemeColor(c.toUpperCase());
+    }
+  }, []);
 
   const label = section ?? (active ? SECTION_LABELS[active] : "00 — INTRO");
 
@@ -91,8 +98,10 @@ export default function HudBar({ section }: { section?: string }) {
 
       <span className="text-lime">{label}</span>
 
-      <div className="flex items-center gap-5">
-        <ThemeToggle compact />
+      <div className="flex items-center gap-4">
+        <span className="flex items-center gap-2">
+          THEME <span className="w-2.5 h-2.5 bg-lime inline-block" /> {themeColor}
+        </span>
         <span className="text-lime">
           {time} — LDN
         </span>
