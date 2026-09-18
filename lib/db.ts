@@ -15,6 +15,10 @@ export function getPool(): Pool | null {
     global._pgPool = new Pool({
       connectionString,
       ssl: connectionString.includes("localhost") ? false : { rejectUnauthorized: false },
+      // Keep well under Supabase session-mode pooler limit of 15
+      max: 5,
+      idleTimeoutMillis: 10_000,
+      connectionTimeoutMillis: 5_000,
     });
   }
   return global._pgPool;
