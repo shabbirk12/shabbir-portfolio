@@ -36,21 +36,22 @@ export default async function WorkDetail({ params }: { params: { slug: string } 
   const cs = item.caseStudy;
 
   return (
-    <main className="relative bg-ink min-h-screen">
+    <main className="relative bg-ink min-h-screen overflow-x-hidden w-full max-w-full">
       <HudBar section={`${item.index} — ${item.title.toUpperCase()}`} />
       <Nav />
 
-      {/* Ambient background glow */}
-      <div className="ambient-blob w-[500px] h-[500px] -top-20 -left-20 opacity-30 animate-float" aria-hidden="true" />
-      <div
-        className="ambient-blob w-[420px] h-[420px] top-[40%] -right-20 opacity-20 animate-float"
-        style={{ animationDelay: "-4s" }}
-        aria-hidden="true"
-      />
+      {/* Ambient background glow — safely contained to prevent horizontal scroll */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div className="ambient-blob w-[500px] h-[500px] -top-20 -left-20 opacity-30 animate-float" />
+        <div
+          className="ambient-blob w-[420px] h-[420px] top-[40%] -right-20 opacity-20 animate-float"
+          style={{ animationDelay: "-4s" }}
+        />
+      </div>
 
-      <article className="pt-36 md:pt-44 px-6 md:px-12 pb-24 max-w-7xl mx-auto">
+      <article className="pt-32 sm:pt-36 md:pt-44 px-4 sm:px-6 md:px-12 pb-24 max-w-7xl mx-auto w-full overflow-hidden">
         {/* Navigation Breadcrumb Bar */}
-        <Reveal className="flex items-center justify-between mb-8 pb-4 border-b border-line font-mono text-[0.68rem] tracking-widest2 text-muted">
+        <Reveal className="flex flex-wrap items-center justify-between gap-3 mb-8 pb-4 border-b border-line font-mono text-[0.68rem] tracking-widest2 text-muted">
           <Link
             href="/#work"
             className="flex items-center gap-2 text-paper hover:text-lime transition-colors group"
@@ -58,7 +59,7 @@ export default async function WorkDetail({ params }: { params: { slug: string } 
             <span className="transition-transform group-hover:-translate-x-1">←</span>
             <span>BACK TO ALL PROJECTS</span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0 flex-wrap">
             <span className="text-lime">{item.index}</span>
             <span>/</span>
             <span className="text-paper">{item.year}</span>
@@ -73,10 +74,10 @@ export default async function WorkDetail({ params }: { params: { slug: string } 
             <span className="inline-block font-mono text-xs tracking-widest2 text-lime uppercase mb-3 border border-lime/30 px-3 py-1 rounded-full bg-lime/5">
               {item.tag}
             </span>
-            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl uppercase leading-[0.98] text-paper">
+            <h1 className="font-display text-3xl sm:text-5xl md:text-7xl uppercase leading-[0.98] text-paper break-words">
               {item.title}
             </h1>
-            <p className="font-display text-xl md:text-2xl text-muted mt-4 font-normal max-w-2xl leading-relaxed">
+            <p className="font-display text-lg sm:text-xl md:text-2xl text-muted mt-4 font-normal max-w-2xl leading-relaxed break-words">
               {cs.heroLine}
             </p>
           </Reveal>
@@ -343,8 +344,8 @@ export default async function WorkDetail({ params }: { params: { slug: string } 
             <span className="font-mono text-xs tracking-widest2 text-muted uppercase block mb-3 transition-colors duration-300 group-hover:text-mint-ink/70">
               NEXT CASE STUDY →
             </span>
-            <h2 className="font-display text-4xl sm:text-6xl md:text-7xl uppercase transition-colors duration-300 group-hover:text-mint-ink">
-              <span className="text-lime mr-4 transition-colors duration-300 group-hover:text-mint-ink">
+            <h2 className="font-display text-3xl sm:text-5xl md:text-7xl uppercase transition-colors duration-300 group-hover:text-mint-ink break-words">
+              <span className="text-lime mr-3 sm:mr-4 transition-colors duration-300 group-hover:text-mint-ink">
                 {next.index}
               </span>
               {next.title}

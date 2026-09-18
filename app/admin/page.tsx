@@ -80,8 +80,8 @@ export default async function AdminDashboard() {
         <div className="grid sm:grid-cols-3 gap-4">
           {[
             { href: "/admin/reviews", label: "Client Reviews", desc: "Moderate testimonials & approve client feedback" },
+            { href: "/admin/brands", label: "Brands Marquee", desc: "Manage client & partner logos on the ticker" },
             { href: "/admin/blogs", label: "Blog Posts & AI", desc: "Write articles & draft with Gemini AI" },
-            { href: "/admin/brands", label: "Brands Marquee", desc: "Add, edit & reorder logos in the scrolling ticker" },
             { href: "/admin/ai", label: "✨ AI Command Center", desc: "Command Gemini to draft copy, blogs, captions & more" },
             { href: "/admin/settings", label: "Site Settings", desc: "Colors, gradients, Gemini API key & branding" },
             { href: "/admin/content/services", label: "Services", desc: "The rows in the Services section" },

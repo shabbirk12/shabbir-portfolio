@@ -2,9 +2,31 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useLoadProgress } from "@/lib/useLoadProgress";
+import { useEffect, useState } from "react";
 
 export default function LoadingScreen({ onDone }: { onDone?: () => void }) {
+  const [skipped, setSkipped] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("portfolio_loaded")) {
+      setSkipped(true);
+      onDone?.();
+    }
+  }, [onDone]);
+
+  if (skipped) return null;
+
+  return <LoadingScreenInner onDone={onDone} />;
+}
+
+function LoadingScreenInner({ onDone }: { onDone?: () => void }) {
   const { progress, done } = useLoadProgress();
+
+  useEffect(() => {
+    if (done && typeof window !== "undefined") {
+      sessionStorage.setItem("portfolio_loaded", "1");
+    }
+  }, [done]);
 
   return (
     <AnimatePresence onExitComplete={onDone}>

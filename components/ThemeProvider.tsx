@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
-function hexToRgbChannels(hex: string, fallback = "198 255 61"): string {
+/* ---------- helpers (mirrored from layout.tsx server-side) ---------- */
+
+function hexToRgbChannels(hex: string, fallback: string): string {
   try {
     const clean = hex.replace("#", "").trim();
     if (clean.length === 3) {
@@ -22,7 +23,7 @@ function hexToRgbChannels(hex: string, fallback = "198 255 61"): string {
   return fallback;
 }
 
-function getContrastInkColor(hex: string): string {
+function getContrastInk(hex: string): string {
   try {
     const clean = hex.replace("#", "").trim();
     if (clean.length === 6) {
@@ -36,60 +37,88 @@ function getContrastInkColor(hex: string): string {
   return "#0a0a0a";
 }
 
-function applyTheme(settings: {
-  primaryColor?: string;
-  bgColor?: string;
-  textColor?: string;
-  accentGradient?: string;
-}) {
-  const primary = settings.primaryColor || "#c6ff3d";
-  const bg = settings.bgColor || "#0a0a0a";
-  const text = settings.textColor || "#f2f1ed";
-  const gradient = settings.accentGradient?.trim() || "";
-
-  const primaryRgb = hexToRgbChannels(primary, "198 255 61");
-  const bgRgb = hexToRgbChannels(bg, "10 10 10");
-  const paperRgb = hexToRgbChannels(text, "242 241 237");
-  const limeInk = getContrastInkColor(primary);
-  const limeGlow = `rgba(${primaryRgb.split(" ").join(", ")}, 0.45)`;
-
-  const el = document.documentElement;
-  el.style.setProperty("--color-lime-rgb", primaryRgb);
-  el.style.setProperty("--color-lime", primary);
-  el.style.setProperty("--color-lime-ink", limeInk);
-  el.style.setProperty("--color-lime-glow", limeGlow);
-  el.style.setProperty("--color-mint-rgb", primaryRgb);
-  el.style.setProperty("--color-mint", primary);
-  el.style.setProperty("--color-mint-ink", limeInk);
-  el.style.setProperty("--color-ink-rgb", bgRgb);
-  el.style.setProperty("--color-ink", bg);
-  el.style.setProperty("--color-paper-rgb", paperRgb);
-  el.style.setProperty("--color-paper", text);
-
-  if (gradient) {
-    el.style.setProperty("--accent-gradient", gradient);
-  } else {
-    el.style.removeProperty("--accent-gradient");
-  }
-
-  // Also update body background and text color directly
-  document.body.style.backgroundColor = bg;
-  document.body.style.color = text;
-}
+/* ---------- component ---------- */
 
 export default function ThemeProvider() {
-  const pathname = usePathname();
+  const styleRef = useRef<HTMLStyleElement | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/site-settings")
-      .then((r) => r.json())
-      .then((settings) => {
-        if (!cancelled) applyTheme(settings);
-      })
-      .catch(() => {/* silently ignore — SSR style tag still covers first render */});
-    return () => { cancelled = true; };
-  }, [pathname]);
+
+    async function apply() {
+      try {
+        const res = await fetch("/api/site-settings", { cache: "no-store" });
+        if (!res.ok || cancelled) return;
+        const s = await res.json();
+
+        const primary = s.primaryColor || "#c6ff3d";
+        const bg = s.bgColor || "#0a0a0a";
+        const text = s.textColor || "#f2f1ed";
+        const gradient = s.accentGradient?.trim() || "";
+
+        const primaryRgb = hexToRgbChannels(primary, "198 255 61");
+        const bgRgb = hexToRgbChannels(bg, "10 10 10");
+        const paperRgb = hexToRgbChannels(text, "242 241 237");
+        const limeInk = getContrastInk(primary);
+        const channels = primaryRgb.split(" ");
+        const limeGlow = `rgba(${channels.join(", ")}, 0.45)`;
+
+        const root = document.documentElement;
+
+        root.style.setProperty("--color-lime-rgb", primaryRgb);
+        root.style.setProperty("--color-lime", primary);
+        root.style.setProperty("--color-lime-ink", limeInk);
+        root.style.setProperty("--color-lime-glow", limeGlow);
+        root.style.setProperty("--color-mint-rgb", primaryRgb);
+        root.style.setProperty("--color-mint", primary);
+        root.style.setProperty("--color-mint-ink", limeInk);
+        root.style.setProperty("--color-ink-rgb", bgRgb);
+        root.style.setProperty("--color-ink", bg);
+        root.style.setProperty("--color-paper-rgb", paperRgb);
+        root.style.setProperty("--color-paper", text);
+
+        document.body.style.backgroundColor = bg;
+        document.body.style.color = text;
+
+        /* gradient overrides via style tag */
+        if (styleRef.current) {
+          styleRef.current.remove();
+          styleRef.current = null;
+        }
+
+        if (gradient) {
+          root.style.setProperty("--accent-gradient", gradient);
+          const tag = document.createElement("style");
+          tag.setAttribute("data-theme-gradient", "");
+          tag.textContent = [
+            `button.bg-lime, a.bg-lime, .bg-lime { background: ${gradient} !important; }`,
+            `.accent-gradient-text { background: ${gradient} !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }`,
+          ].join("\n");
+          document.head.appendChild(tag);
+          styleRef.current = tag;
+        } else {
+          root.style.removeProperty("--accent-gradient");
+          const tag = document.createElement("style");
+          tag.setAttribute("data-theme-gradient", "");
+          tag.textContent = `.accent-gradient-text { color: ${primary} !important; -webkit-text-fill-color: initial !important; background: none !important; }`;
+          document.head.appendChild(tag);
+          styleRef.current = tag;
+        }
+      } catch {
+        // Settings fetch failed — keep server-rendered defaults
+      }
+    }
+
+    apply();
+
+    return () => {
+      cancelled = true;
+      if (styleRef.current) {
+        styleRef.current.remove();
+        styleRef.current = null;
+      }
+    };
+  }, []);
 
   return null;
 }

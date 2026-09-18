@@ -17,7 +17,7 @@
   --color-mint: #c6ff3d;
   --color-mint-ink: #1c2600;
   --color-teal: #142805;
-  --font-script: "Instrument Serif", "Caveat", serif, cursive;
+  --font-script: "Caveat", "Instrument Serif", cursive, serif;
 }
 
 @layer base {
@@ -30,6 +30,12 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: #242424 #0a0a0a;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 html {

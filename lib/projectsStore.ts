@@ -63,29 +63,10 @@ export async function createProject(item: WorkItem): Promise<void> {
 }
 
 export async function updateProject(slug: string, item: WorkItem): Promise<void> {
-  const existing = await query("SELECT sort_order FROM projects WHERE slug = $1", [slug]);
-
+  const existing = await query("SELECT 1 FROM projects WHERE slug = $1", [slug]);
   if (existing.length === 0) {
-    // Project is in the JSON fallback but not yet in DB — insert it now (upsert)
-    // Also check if the new slug clashes with another DB row
-    if (item.slug !== slug) {
-      const clash = await query("SELECT 1 FROM projects WHERE slug = $1", [item.slug]);
-      if (clash.length > 0) {
-        throw new Error(`A project with slug "${item.slug}" already exists.`);
-      }
-    }
-    // Get a sort order that puts it at the end
-    const [{ max_sort }] = await query<{ max_sort: number | null }>(
-      "SELECT MAX(sort_order) AS max_sort FROM projects"
-    );
-    await query(
-      "INSERT INTO projects (slug, sort_order, data) VALUES ($1, $2, $3)",
-      [item.slug, (max_sort ?? 0) + 1, JSON.stringify(item)]
-    );
-    return;
+    throw new Error(`No project found with slug "${slug}".`);
   }
-
-  // Project is in DB — update it (slug may have changed)
   if (item.slug !== slug) {
     const clash = await query("SELECT 1 FROM projects WHERE slug = $1", [item.slug]);
     if (clash.length > 0) {

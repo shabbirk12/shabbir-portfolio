@@ -106,11 +106,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {themeOverrides && (
           <style dangerouslySetInnerHTML={{ __html: themeOverrides }} />
         )}
+        <ThemeProvider />
         <div className="grain-overlay bg-grain" aria-hidden="true" />
         <Spotlight />
         <CustomCursor />
         <SmoothScroll />
-        <ThemeProvider />
         {children}
       </body>
     </html>
