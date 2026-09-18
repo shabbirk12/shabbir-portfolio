@@ -102,27 +102,26 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 md:px-10 py-4 md:py-5 transition-colors duration-300 ${
-        scrolled ? "bg-ink/80 backdrop-blur-md border-b border-line" : ""
+      className={`fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 md:px-10 py-5 transition-colors duration-300 ${
+        scrolled ? "bg-ink/70 backdrop-blur-md border-b border-line" : ""
       }`}
     >
-      <Link href="/" className="flex items-center gap-3 shrink-0">
+      <Link href="/" className="flex items-center gap-3">
         {logoUrl ? (
           <span className="relative h-7 w-7 shrink-0">
             <Image src={logoUrl} alt="Logo" fill className="object-contain" />
           </span>
         ) : (
-          <span className="w-7 h-7 rounded bg-lime text-lime-ink font-display text-xs flex items-center justify-center font-bold">
+          <span className="w-7 h-7 rounded bg-lime text-lime-ink font-display text-xs flex items-center justify-center">
             S
           </span>
         )}
-        <span className="font-display text-xs sm:text-sm tracking-widest2 uppercase">
-          SHABBIR<span className="text-lime">.</span>
-          <span className="text-muted/60 hidden md:inline"> PORTFOLIO/2026</span>
+        <span className="font-display text-sm tracking-widest2 uppercase hidden sm:inline">
+          SHABBIR<span className="text-lime">.</span> PORTFOLIO/2026
         </span>
       </Link>
 
-      <nav className="hidden lg:flex items-center gap-4 xl:gap-7 font-mono text-[0.68rem] tracking-widest2 text-muted">
+      <nav className="hidden md:flex items-center gap-7 font-mono text-[0.68rem] tracking-widest2 text-muted">
         {links.map((l) => {
           const isActive = active === l.id;
           return (
@@ -130,7 +129,7 @@ export default function Nav() {
               key={l.n}
               href={l.href}
               onClick={(e) => handleNavClick(e, l)}
-              className={`underline-sweep transition-colors whitespace-nowrap ${
+              className={`underline-sweep transition-colors ${
                 isActive ? "text-lime" : "hover:text-lime"
               }`}
             >
@@ -143,7 +142,8 @@ export default function Nav() {
         <a
           href="/#contact"
           onClick={(e) => handleNavClick(e, { id: "contact", href: "/#contact" })}
-          className="rounded-full bg-lime text-lime-ink px-4 xl:px-5 py-2 font-mono text-[0.65rem] tracking-widest2 whitespace-nowrap font-semibold hover:shadow-glow-lime transition-shadow"
+          className="rounded-full bg-lime text-lime-ink px-5 py-2 font-mono text-[0.65rem] tracking-widest2
+                     hover:shadow-glow-lime transition-shadow"
         >
           GET IN TOUCH
         </a>
@@ -151,51 +151,44 @@ export default function Nav() {
 
       <button
         onClick={() => setOpen((v) => !v)}
-        className="lg:hidden font-mono text-[0.68rem] tracking-widest2 border border-line px-3.5 py-2 rounded hover:border-lime text-paper transition-colors flex items-center gap-2"
+        className="md:hidden font-mono text-[0.68rem] tracking-widest2 border border-line px-3 py-2 hover:border-lime transition-colors"
         aria-expanded={open}
         aria-label="Toggle menu"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-lime" />
         {open ? "CLOSE" : "MENU"}
       </button>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden absolute top-full left-0 right-0 bg-ink/95 backdrop-blur-xl border-t border-b border-line px-6 py-8 flex flex-col gap-5 shadow-2xl max-h-[calc(100vh-75px)] overflow-y-auto"
+            className="md:hidden absolute top-full left-0 right-0 bg-ink border-t border-line px-6 py-6 flex flex-col gap-4"
           >
-            {links.map((l) => {
-              const isActive = active === l.id;
-              return (
-                <a
-                  key={l.n}
-                  href={l.href}
-                  onClick={(e) => {
-                    setOpen(false);
-                    handleNavClick(e, l);
-                  }}
-                  className={`font-mono text-sm tracking-widest2 transition-colors flex items-center justify-between py-1 border-b border-line/40 ${
-                    isActive ? "text-lime" : "text-muted hover:text-lime"
-                  }`}
-                >
-                  <span>{l.n} / {l.label}</span>
-                  {isActive && <span className="text-lime text-xs">●</span>}
-                </a>
-              );
-            })}
+            {links.map((l) => (
+              <a
+                key={l.n}
+                href={l.href}
+                onClick={(e) => {
+                  setOpen(false);
+                  handleNavClick(e, l);
+                }}
+                className="font-mono text-sm tracking-widest2 text-muted hover:text-lime"
+              >
+                {l.n}/{l.label}
+              </a>
+            ))}
             <a
               href="/#contact"
               onClick={(e) => {
                 setOpen(false);
                 handleNavClick(e, { id: "contact", href: "/#contact" });
               }}
-              className="mt-2 rounded-full bg-lime text-lime-ink px-5 py-3 text-center font-mono text-xs tracking-widest2 font-semibold shadow-glow-lime/30"
+              className="rounded-full bg-lime text-lime-ink px-5 py-3 text-center font-mono text-xs tracking-widest2"
             >
-              GET IN TOUCH →
+              GET IN TOUCH
             </a>
           </motion.div>
         )}

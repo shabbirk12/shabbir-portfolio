@@ -31,9 +31,9 @@ export default function ResumePage() {
             🖨️ PRINT RESUME
           </button>
           <a
-            href="/cv.pdf"
-            download="Shabbir_Khan_Resume.pdf"
-            className="inline-flex items-center gap-2 rounded-full bg-lime text-lime-ink px-5 py-2 font-mono text-xs tracking-widest2 font-semibold hover:scale-105 transition-transform shadow-sm hover:shadow-glow-lime/40"
+            href={profile.cv || "/cv.pdf"}
+            download
+            className="inline-flex items-center gap-2 rounded-full bg-lime text-lime-ink px-5 py-2 font-mono text-xs tracking-widest2 font-semibold hover:scale-105 transition-transform"
           >
             📥 DOWNLOAD PDF
           </a>

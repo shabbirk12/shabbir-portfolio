@@ -21,8 +21,9 @@ export default async function Work() {
       <Reveal className="relative flex items-end justify-between mb-10 pb-6 border-b border-line">
         <div>
           <p className="eyebrow mb-3">03 / {work.length} PROJECTS</p>
-          <h2 className="font-display text-4xl sm:text-5xl md:text-7xl uppercase leading-none">
-            Selected <span className="font-script italic text-lime text-5xl sm:text-6xl md:text-8xl lowercase">work.</span>
+          <h2 className="font-display text-4xl md:text-6xl uppercase leading-none flex flex-wrap items-baseline gap-x-3">
+            Selected
+            <span className="font-script italic text-lime lowercase text-5xl md:text-7xl">work.</span>
           </h2>
         </div>
         <span className="hidden md:block font-mono text-xs text-muted tracking-widest2">

@@ -9,8 +9,9 @@ export default async function Lab() {
     <section id="lab" className="px-6 md:px-10 py-24 md:py-32 border-t border-line">
       <Reveal className="mb-14">
         <p className="eyebrow mb-3">04 / PROOF OF BUILD</p>
-        <h2 className="font-display text-4xl sm:text-5xl md:text-7xl uppercase leading-none">
-          Experiment <span className="font-script italic text-lime text-5xl sm:text-6xl md:text-8xl lowercase">lab.</span>
+        <h2 className="font-display text-4xl md:text-6xl uppercase leading-none flex flex-wrap items-baseline gap-x-3">
+          Experiment
+          <span className="font-script italic text-lime lowercase text-5xl md:text-7xl">lab.</span>
         </h2>
       </Reveal>
 
