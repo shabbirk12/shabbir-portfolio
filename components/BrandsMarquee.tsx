@@ -124,25 +124,7 @@ const BRANDS: Brand[] = [
 ];
 
 export default function BrandsMarquee() {
-  const [dbBrands, setDbBrands] = React.useState<
-    { id: number; name: string; category: string; logo_url: string }[]
-  >([]);
-
-  React.useEffect(() => {
-    fetch("/api/admin/brands")
-      .then((r) => r.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setDbBrands(data);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  const hasDbBrands = dbBrands.length > 0;
-  const list = hasDbBrands
-    ? [...dbBrands, ...dbBrands, ...dbBrands]
-    : [...BRANDS, ...BRANDS, ...BRANDS];
+  const list = [...BRANDS, ...BRANDS, ...BRANDS];
 
   return (
     <section className="relative py-12 border-t border-line overflow-hidden bg-surface/10">
@@ -175,29 +157,14 @@ export default function BrandsMarquee() {
       {/* Infinite smooth right-to-left marquee track */}
       <div className="relative flex w-full overflow-hidden">
         <div className="flex shrink-0 items-center gap-14 sm:gap-20 py-2 animate-[marquee_32s_linear_infinite] hover:[animation-play-state:paused]">
-          {list.map((brand: any, idx) => (
+          {list.map((brand, idx) => (
             <div
               key={`${brand.name}-${idx}`}
               className="group flex shrink-0 items-center gap-3 text-paper/45 hover:text-lime transition-colors duration-300 select-none cursor-default"
-              title={`${brand.name} — ${brand.category || ""}`}
+              title={`${brand.name} — ${brand.category}`}
             >
               <div className="transition-transform duration-300 group-hover:scale-105">
-                {hasDbBrands ? (
-                  brand.logo_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={brand.logo_url}
-                      alt={brand.name}
-                      className="h-6 sm:h-7 w-auto max-w-[140px] object-contain opacity-70 group-hover:opacity-100 transition-opacity"
-                    />
-                  ) : (
-                    <span className="font-display text-sm tracking-wider uppercase font-semibold">
-                      {brand.name}
-                    </span>
-                  )
-                ) : (
-                  brand.svg
-                )}
+                {brand.svg}
               </div>
             </div>
           ))}

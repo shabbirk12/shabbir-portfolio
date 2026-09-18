@@ -17,10 +17,7 @@ export default function About({
     <section id="about" className="px-6 md:px-10 py-24 md:py-32">
       <Reveal className="mb-14">
         <p className="eyebrow mb-3">01 / ABOUT ME</p>
-        <h2 className="font-display text-4xl md:text-6xl uppercase leading-none flex flex-wrap items-baseline gap-x-3">
-          About
-          <span className="font-script italic text-lime lowercase text-5xl md:text-7xl">me.</span>
-        </h2>
+        <h2 className="font-display text-4xl md:text-6xl uppercase">About</h2>
       </Reveal>
 
       {/* Description + details / portrait */}

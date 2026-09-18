@@ -3,7 +3,6 @@ import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import Spotlight from "@/components/Spotlight";
 import SmoothScroll from "@/components/SmoothScroll";
-import ThemeProvider from "@/components/ThemeProvider";
 import { getSiteSettings } from "@/lib/siteSettings";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -106,7 +105,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {themeOverrides && (
           <style dangerouslySetInnerHTML={{ __html: themeOverrides }} />
         )}
-        <ThemeProvider />
         <div className="grain-overlay bg-grain" aria-hidden="true" />
         <Spotlight />
         <CustomCursor />

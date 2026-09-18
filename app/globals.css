@@ -1,5 +1,5 @@
 @import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=switzer@400,500,600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Instrument+Serif:ital@1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Caveat:wght@600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -17,16 +17,13 @@
   --color-mint: #c6ff3d;
   --color-mint-ink: #1c2600;
   --color-teal: #142805;
-  --font-script: "Caveat", "Instrument Serif", cursive, serif;
+  --font-script: "Instrument Serif", "Caveat", serif, cursive;
 }
 
 @layer base {
   .font-display {
     font-weight: 600;
     letter-spacing: -0.01em;
-  }
-  .font-script {
-    font-weight: 700;
   }
 }
 

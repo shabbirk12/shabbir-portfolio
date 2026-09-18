@@ -21,7 +21,7 @@ const config: Config = {
         display: ["General Sans", "sans-serif"],
         body: ["Switzer", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
-        script: ["Caveat", "Instrument Serif", "var(--font-script)", "cursive"],
+        script: ["var(--font-script)", "cursive"],
       },
       letterSpacing: {
         widest2: "0.28em",
