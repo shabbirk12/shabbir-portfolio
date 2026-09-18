@@ -21,6 +21,13 @@ export function useLoadProgress(minDurationMs = 900, maxDurationMs = 4000) {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Skip loader if the page has already loaded in this session
+    if (sessionStorage.getItem("site_loaded")) {
+      setProgress(100);
+      setDone(true);
+      return;
+    }
+
     const startedAt = performance.now();
     let target = 0;
     let displayed = 0;
@@ -35,6 +42,7 @@ export function useLoadProgress(minDurationMs = 900, maxDurationMs = 4000) {
       cancelAnimationFrame(raf);
       if (completionTimer) clearTimeout(completionTimer);
       if (hardTimer) clearTimeout(hardTimer);
+      sessionStorage.setItem("site_loaded", "1");
       setProgress(100);
       setDone(true);
     };

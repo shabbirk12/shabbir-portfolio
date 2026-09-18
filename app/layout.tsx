@@ -3,6 +3,7 @@ import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import Spotlight from "@/components/Spotlight";
 import SmoothScroll from "@/components/SmoothScroll";
+import ThemeProvider from "@/components/ThemeProvider";
 import { getSiteSettings } from "@/lib/siteSettings";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -109,6 +110,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Spotlight />
         <CustomCursor />
         <SmoothScroll />
+        <ThemeProvider />
         {children}
       </body>
     </html>

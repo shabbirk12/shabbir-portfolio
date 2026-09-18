@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { WorkItem, WorkStat } from "@/lib/types";
 
@@ -68,8 +68,17 @@ export default function ProjectForm({
   const [thumbMsg, setThumbMsg] = useState("");
   const [uploadingGalleryIdx, setUploadingGalleryIdx] = useState<number | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [summaryCmd, setSummaryCmd] = useState("");
+  const [summaryCmdOpen, setSummaryCmdOpen] = useState(false);
+  const [heroCmd, setHeroCmd] = useState("");
+  const [heroCmdOpen, setHeroCmdOpen] = useState(false);
+  const summaryCmdRef = useRef<HTMLInputElement>(null);
+  const heroCmdRef = useRef<HTMLInputElement>(null);
 
-  async function generateWithGemini(task: "project_summary" | "project_hero") {
+  async function generateWithGemini(
+    task: "project_summary" | "project_hero",
+    customInstruction?: string
+  ) {
     const basis = item.title || item.tag || item.summary;
     if (!basis.trim()) {
       alert("Please enter a Project Title or Tag first so Gemini has context!");
@@ -80,7 +89,13 @@ export default function ProjectForm({
       const res = await fetch("/api/admin/ai/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task, prompt: `${item.title} (${item.tag || "Creative Design & Engineering"})` }),
+        body: JSON.stringify({
+          task,
+          prompt: customInstruction
+            ? `${customInstruction}\n\nProject: ${item.title} (${item.tag || "Creative Design & Engineering"})\nExisting summary: ${item.summary}`
+            : `${item.title} (${item.tag || "Creative Design & Engineering"})`,
+          customInstruction,
+        }),
       });
       const data = await res.json();
       if (data.generatedText) {
@@ -269,13 +284,51 @@ export default function ProjectForm({
           <span className={labelClass}>SUMMARY (card description, one line)</span>
           <button
             type="button"
-            onClick={() => generateWithGemini("project_summary")}
+            onClick={() => {
+              setSummaryCmdOpen((v) => !v);
+              setTimeout(() => summaryCmdRef.current?.focus(), 50);
+            }}
             disabled={aiLoading}
             className="font-mono text-[0.65rem] tracking-widest2 text-lime hover:underline cursor-pointer disabled:opacity-50"
           >
-            {aiLoading ? "GENERATING…" : "✨ POLISH WITH GEMINI"}
+            {aiLoading ? "GENERATING…" : "✨ AI"}
           </button>
         </div>
+
+        {/* Inline mini AI command center */}
+        {summaryCmdOpen && (
+          <div className="flex items-stretch gap-2 border border-lime/30 bg-lime/5 rounded px-3 py-2">
+            <input
+              ref={summaryCmdRef}
+              type="text"
+              value={summaryCmd}
+              onChange={(e) => setSummaryCmd(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  generateWithGemini("project_summary", summaryCmd || undefined);
+                  setSummaryCmdOpen(false);
+                  setSummaryCmd("");
+                }
+              }}
+              placeholder="e.g. Write a punchy one-liner for this branding project…"
+              className="flex-1 bg-transparent text-[0.7rem] font-mono text-paper placeholder:text-muted/40 focus-visible:outline-none"
+            />
+            <button
+              type="button"
+              disabled={aiLoading}
+              onClick={() => {
+                generateWithGemini("project_summary", summaryCmd || undefined);
+                setSummaryCmdOpen(false);
+                setSummaryCmd("");
+              }}
+              className="font-mono text-[0.65rem] tracking-widest2 text-lime-ink bg-lime px-3 py-1 rounded disabled:opacity-50 shrink-0"
+            >
+              {aiLoading ? "…" : "RUN"}
+            </button>
+          </div>
+        )}
+
         <textarea
           required
           rows={2}
@@ -377,13 +430,51 @@ export default function ProjectForm({
           <span className={labelClass}>HERO LINE (big case-study headline)</span>
           <button
             type="button"
-            onClick={() => generateWithGemini("project_hero")}
+            onClick={() => {
+              setHeroCmdOpen((v) => !v);
+              setTimeout(() => heroCmdRef.current?.focus(), 50);
+            }}
             disabled={aiLoading}
             className="font-mono text-[0.65rem] tracking-widest2 text-lime hover:underline cursor-pointer disabled:opacity-50"
           >
-            {aiLoading ? "GENERATING…" : "✨ GENERATE HOOK WITH GEMINI"}
+            {aiLoading ? "GENERATING…" : "✨ AI"}
           </button>
         </div>
+
+        {/* Inline mini AI command center */}
+        {heroCmdOpen && (
+          <div className="flex items-stretch gap-2 border border-lime/30 bg-lime/5 rounded px-3 py-2">
+            <input
+              ref={heroCmdRef}
+              type="text"
+              value={heroCmd}
+              onChange={(e) => setHeroCmd(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  generateWithGemini("project_hero", heroCmd || undefined);
+                  setHeroCmdOpen(false);
+                  setHeroCmd("");
+                }
+              }}
+              placeholder="e.g. Write a bold, short headline for the case study hero…"
+              className="flex-1 bg-transparent text-[0.7rem] font-mono text-paper placeholder:text-muted/40 focus-visible:outline-none"
+            />
+            <button
+              type="button"
+              disabled={aiLoading}
+              onClick={() => {
+                generateWithGemini("project_hero", heroCmd || undefined);
+                setHeroCmdOpen(false);
+                setHeroCmd("");
+              }}
+              className="font-mono text-[0.65rem] tracking-widest2 text-lime-ink bg-lime px-3 py-1 rounded disabled:opacity-50 shrink-0"
+            >
+              {aiLoading ? "…" : "RUN"}
+            </button>
+          </div>
+        )}
+
         <textarea
           rows={2}
           value={item.caseStudy.heroLine}
