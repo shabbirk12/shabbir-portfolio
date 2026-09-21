@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hasValidSession } from "@/lib/adminAuth";
-import { query } from "@/lib/db";
+import { getSiteSettings } from "@/lib/siteSettings";
 
 export const dynamic = "force-dynamic";
 
@@ -15,21 +15,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Prompt is required." }, { status: 400 });
     }
 
-    // Retrieve Gemini API Key from environment or site_settings
-    let apiKey = process.env.GEMINI_API_KEY?.trim();
-    if (!apiKey) {
-      try {
-        const rows = await query<{ gemini_api_key?: string }>("SELECT gemini_api_key FROM site_settings WHERE id = 1");
-        if (rows[0]?.gemini_api_key) apiKey = rows[0].gemini_api_key.trim();
-      } catch {}
-    }
+    // Retrieve Gemini API Key from site_settings or environment
+    const settings = await getSiteSettings();
+    const apiKey = (settings.geminiApiKey || process.env.GEMINI_API_KEY || "").trim();
 
-    // If API Key is available, call Google Gemini 1.5 Flash API directly
+    // If API Key is available, call Google Gemini API directly
     if (apiKey) {
-      const systemInstruction = "You are an elite creative director, brand strategist, and senior full-stack engineer helping craft portfolio content for Shabbir Khan. Tone: crisp, bold, editorial, modern, punchy. Return cleanly formatted output without fluff.";
-      const fullPrompt = `Task: ${task}\nContext: ${context || "Portfolio design & engineering"}\nInstructions/Topic: ${prompt}`;
+      let taskInstruction = "";
+      if (task === "project_summary") {
+        taskInstruction = "CRITICAL REQUIREMENT: Write EXACTLY ONE concise, punchy sentence (maximum 20-25 words) for a portfolio card description. Do NOT write markdown headings (no ###), do NOT write bullet points, labels, or multi-line text. Output ONLY the single sentence.";
+      } else if (task === "project_hero") {
+        taskInstruction = "CRITICAL REQUIREMENT: Write EXACTLY ONE bold editorial tagline sentence (maximum 15-20 words) for a project case study header. Do NOT write markdown headings, bullet points, or labels. Output ONLY the single sentence.";
+      } else if (task === "project_title") {
+        taskInstruction = "Return ONLY a clean 1-4 word project title. No markdown, no punctuation.";
+      } else if (task === "blog_draft") {
+        taskInstruction = "Write a comprehensive, engaging markdown blog article on the topic.";
+      }
 
-      const model = "gemini-3.6-flash";
+      const systemInstruction = "You are an elite creative director and copywriter crafting portfolio content for Shabbir Khan. Tone: crisp, bold, editorial, modern, punchy. Follow formatting and length constraints strictly.";
+      const fullPrompt = `${taskInstruction}\n\nTopic / Input: ${prompt}\nContext: ${context || "Portfolio design & engineering"}`;
+
+      const model = "gemini-2.0-flash";
       const geminiRes = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
         {
@@ -45,7 +51,7 @@ export async function POST(req: Request) {
             ],
             generationConfig: {
               temperature: 0.7,
-              maxOutputTokens: 1000,
+              maxOutputTokens: task === "project_summary" || task === "project_hero" ? 80 : 1200,
             }
           }),
         }
@@ -55,7 +61,18 @@ export async function POST(req: Request) {
         const geminiJson = await geminiRes.json();
         const text = geminiJson.candidates?.[0]?.content?.parts?.[0]?.text;
         if (text) {
-          return NextResponse.json({ ok: true, generatedText: text.trim(), provider: "gemini" });
+          let cleaned = text.trim();
+          if (task === "project_summary" || task === "project_hero") {
+            // Strip any accidental markdown headers, bold labels, quotes
+            cleaned = cleaned.replace(/^#+.*$/gm, "").trim();
+            cleaned = cleaned.replace(/^\*\*.*?\*\*:\s*/i, "").trim();
+            cleaned = cleaned.replace(/^(summary|overview|project|tagline):\s*/i, "").trim();
+            const lines = cleaned.split("\n").map((l: string) => l.trim()).filter(Boolean);
+            if (lines.length > 0) {
+              cleaned = lines[0].replace(/^["'“](.*)["'”]$/, "$1");
+            }
+          }
+          return NextResponse.json({ ok: true, generatedText: cleaned, provider: "gemini" });
         }
       } else {
         console.warn("Gemini API call failed with status", geminiRes.status, await geminiRes.text());
