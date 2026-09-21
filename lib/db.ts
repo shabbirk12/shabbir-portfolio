@@ -15,6 +15,9 @@ export function getPool(): Pool | null {
     global._pgPool = new Pool({
       connectionString,
       ssl: connectionString.includes("localhost") ? false : { rejectUnauthorized: false },
+      max: 5,
+      idleTimeoutMillis: 10_000,
+      connectionTimeoutMillis: 5_000,
     });
   }
   return global._pgPool;

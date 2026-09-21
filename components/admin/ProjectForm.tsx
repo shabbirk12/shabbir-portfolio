@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { WorkItem, WorkStat } from "@/lib/types";
 
@@ -52,6 +52,145 @@ const labelClass = "font-mono text-[0.65rem] tracking-widest2 text-muted";
 const fieldWrap = "flex flex-col gap-2";
 const sectionTitle = "font-mono text-xs tracking-widest2 text-mint border-t border-line pt-6 mt-2";
 
+/* ------------------------------------------------------------------ */
+/*  InlineGeminiCmd — mini AI command bar for individual text fields   */
+/* ------------------------------------------------------------------ */
+function InlineGeminiCmd({
+  fieldLabel,
+  currentValue,
+  context,
+  onResult,
+}: {
+  fieldLabel: string;
+  currentValue: string;
+  context: string;
+  onResult: (text: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [prevValue, setPrevValue] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  async function generate() {
+    if (!prompt.trim()) return;
+    setLoading(true);
+    setPrevValue(currentValue);
+
+    const fullPrompt = [
+      `You are a creative copywriter helping with a portfolio project.`,
+      `Field: ${fieldLabel}`,
+      context ? `Project context: ${context}` : "",
+      `Current value: ${currentValue || "(empty)"}`,
+      ``,
+      `User instruction: ${prompt.trim()}`,
+      ``,
+      fieldLabel.toLowerCase().includes("summary") || fieldLabel.toLowerCase().includes("hero")
+        ? `CRITICAL: Write EXACTLY ONE single, concise punchy sentence (maximum 20 words). Do NOT write markdown headings (no ###), do NOT write bullet points, labels, or multiple lines.`
+        : `Respond with ONLY the output text — no quotes, no explanations, no markdown formatting.`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    try {
+      const res = await fetch("/api/admin/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: fullPrompt }),
+      });
+      const data = await res.json();
+      if (data.text) {
+        onResult(data.text.trim());
+        setPrompt("");
+        setOpen(false);
+      } else {
+        alert(data.error || "AI generation failed.");
+      }
+    } catch {
+      alert("Network error calling Gemini.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function undo() {
+    if (prevValue !== null) {
+      onResult(prevValue);
+      setPrevValue(null);
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-2 shrink-0">
+      {prevValue !== null && (
+        <button
+          type="button"
+          onClick={undo}
+          className="font-mono text-[0.6rem] tracking-widest2 text-yellow-400 hover:text-yellow-300 transition-colors"
+        >
+          ↩ UNDO
+        </button>
+      )}
+
+      {!open ? (
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(true);
+            setTimeout(() => inputRef.current?.focus(), 50);
+          }}
+          className="font-mono text-[0.65rem] tracking-widest2 text-lime hover:underline cursor-pointer"
+        >
+          ✨ AI
+        </button>
+      ) : (
+        <div className="flex items-center gap-1.5 bg-surface/60 border border-line rounded-full px-2 py-1">
+          <input
+            ref={inputRef}
+            type="text"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                generate();
+              }
+              if (e.key === "Escape") {
+                setOpen(false);
+                setPrompt("");
+              }
+            }}
+            placeholder="Tell Gemini what to write…"
+            disabled={loading}
+            className="bg-transparent text-paper text-xs placeholder:text-muted/50 outline-none w-48 sm:w-64"
+          />
+          <button
+            type="button"
+            onClick={generate}
+            disabled={loading || !prompt.trim()}
+            className="font-mono text-[0.6rem] tracking-widest2 text-lime hover:text-white transition-colors disabled:opacity-40 whitespace-nowrap"
+          >
+            {loading ? "…" : "GO"}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              setPrompt("");
+            }}
+            className="text-muted hover:text-paper text-xs ml-0.5"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  ProjectForm                                                        */
+/* ------------------------------------------------------------------ */
 export default function ProjectForm({
   mode,
   initial,
@@ -67,37 +206,9 @@ export default function ProjectForm({
   const [uploadingThumb, setUploadingThumb] = useState(false);
   const [thumbMsg, setThumbMsg] = useState("");
   const [uploadingGalleryIdx, setUploadingGalleryIdx] = useState<number | null>(null);
-  const [aiLoading, setAiLoading] = useState(false);
 
-  async function generateWithGemini(task: "project_summary" | "project_hero") {
-    const basis = item.title || item.tag || item.summary;
-    if (!basis.trim()) {
-      alert("Please enter a Project Title or Tag first so Gemini has context!");
-      return;
-    }
-    setAiLoading(true);
-    try {
-      const res = await fetch("/api/admin/ai/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task, prompt: `${item.title} (${item.tag || "Creative Design & Engineering"})` }),
-      });
-      const data = await res.json();
-      if (data.generatedText) {
-        if (task === "project_summary") {
-          set("summary", data.generatedText);
-        } else if (task === "project_hero") {
-          setCS("heroLine", data.generatedText);
-        }
-      } else {
-        alert(data.error || "AI generation failed.");
-      }
-    } catch {
-      alert("Network error calling Gemini AI assistant.");
-    } finally {
-      setAiLoading(false);
-    }
-  }
+  /** Context string sent to Gemini for all fields */
+  const projectContext = `${item.title} (${item.tag || "Creative Design & Engineering"}) — ${item.year}`;
 
   async function uploadFile(file: File): Promise<string> {
     const formData = new FormData();
@@ -267,14 +378,12 @@ export default function ProjectForm({
       <div className={fieldWrap}>
         <div className="flex items-center justify-between">
           <span className={labelClass}>SUMMARY (card description, one line)</span>
-          <button
-            type="button"
-            onClick={() => generateWithGemini("project_summary")}
-            disabled={aiLoading}
-            className="font-mono text-[0.65rem] tracking-widest2 text-lime hover:underline cursor-pointer disabled:opacity-50"
-          >
-            {aiLoading ? "GENERATING…" : "✨ POLISH WITH GEMINI"}
-          </button>
+          <InlineGeminiCmd
+            fieldLabel="Project Summary"
+            currentValue={item.summary}
+            context={projectContext}
+            onResult={(text) => set("summary", text)}
+          />
         </div>
         <textarea
           required
@@ -375,14 +484,12 @@ export default function ProjectForm({
       <div className={fieldWrap}>
         <div className="flex items-center justify-between">
           <span className={labelClass}>HERO LINE (big case-study headline)</span>
-          <button
-            type="button"
-            onClick={() => generateWithGemini("project_hero")}
-            disabled={aiLoading}
-            className="font-mono text-[0.65rem] tracking-widest2 text-lime hover:underline cursor-pointer disabled:opacity-50"
-          >
-            {aiLoading ? "GENERATING…" : "✨ GENERATE HOOK WITH GEMINI"}
-          </button>
+          <InlineGeminiCmd
+            fieldLabel="Case Study Hero Line"
+            currentValue={item.caseStudy.heroLine}
+            context={projectContext}
+            onResult={(text) => setCS("heroLine", text)}
+          />
         </div>
         <textarea
           rows={2}
@@ -393,7 +500,15 @@ export default function ProjectForm({
       </div>
 
       <div className={fieldWrap}>
-        <span className={labelClass}>CONTEXT — SUMMARY</span>
+        <div className="flex items-center justify-between">
+          <span className={labelClass}>CONTEXT — SUMMARY</span>
+          <InlineGeminiCmd
+            fieldLabel="Context Summary"
+            currentValue={item.caseStudy.context.summary}
+            context={projectContext}
+            onResult={(text) => setCS("context", { ...item.caseStudy.context, summary: text })}
+          />
+        </div>
         <textarea
           rows={3}
           value={item.caseStudy.context.summary}
@@ -408,7 +523,15 @@ export default function ProjectForm({
       </div>
 
       <div className={fieldWrap}>
-        <span className={labelClass}>THE CHALLENGE</span>
+        <div className="flex items-center justify-between">
+          <span className={labelClass}>THE CHALLENGE</span>
+          <InlineGeminiCmd
+            fieldLabel="The Challenge"
+            currentValue={item.caseStudy.challenge}
+            context={projectContext}
+            onResult={(text) => setCS("challenge", text)}
+          />
+        </div>
         <textarea
           rows={3}
           value={item.caseStudy.challenge}
@@ -418,7 +541,15 @@ export default function ProjectForm({
       </div>
 
       <div className={fieldWrap}>
-        <span className={labelClass}>WHAT I BUILT — SUMMARY</span>
+        <div className="flex items-center justify-between">
+          <span className={labelClass}>WHAT I BUILT — SUMMARY</span>
+          <InlineGeminiCmd
+            fieldLabel="What I Built Summary"
+            currentValue={item.caseStudy.build.summary}
+            context={projectContext}
+            onResult={(text) => setCS("build", { ...item.caseStudy.build, summary: text })}
+          />
+        </div>
         <textarea
           rows={2}
           value={item.caseStudy.build.summary}
@@ -492,7 +623,15 @@ export default function ProjectForm({
       </div>
 
       <div className={fieldWrap}>
-        <span className={labelClass}>RESULTS — SUMMARY</span>
+        <div className="flex items-center justify-between">
+          <span className={labelClass}>RESULTS — SUMMARY</span>
+          <InlineGeminiCmd
+            fieldLabel="Results Summary"
+            currentValue={item.caseStudy.results.summary}
+            context={projectContext}
+            onResult={(text) => setCS("results", { ...item.caseStudy.results, summary: text })}
+          />
+        </div>
         <textarea
           rows={3}
           value={item.caseStudy.results.summary}
