@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import useActiveSection from "@/lib/useActiveSection";
+import ThemeToggle from "@/components/ThemeToggle";
 
 function useLondonClock() {
   const [time, setTime] = useState("--:--:--");
@@ -78,11 +79,11 @@ export default function HudBar({ section }: { section?: string }) {
   const label = section ?? (active ? SECTION_LABELS[active] : "00 — INTRO");
 
   return (
-    <div
+    <footer
+      id="hud-bar"
       className="fixed bottom-0 left-0 right-0 z-50 hidden md:flex items-center justify-between
                  px-6 h-9 border-t border-line bg-ink/85 backdrop-blur-sm font-mono text-[0.65rem]
                  tracking-widest2 text-muted select-none"
-      aria-hidden="true"
     >
       <div className="flex items-center gap-6">
         <span>
@@ -98,7 +99,8 @@ export default function HudBar({ section }: { section?: string }) {
 
       <span className="text-lime">{label}</span>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5">
+        <ThemeToggle compact />
         <span className="flex items-center gap-2">
           THEME <span className="w-2.5 h-2.5 bg-lime inline-block" /> {themeColor}
         </span>
@@ -106,6 +108,6 @@ export default function HudBar({ section }: { section?: string }) {
           {time} — LDN
         </span>
       </div>
-    </div>
+    </footer>
   );
 }

@@ -89,18 +89,27 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       --color-paper: ${text};
       ${gradient ? `--accent-gradient: ${gradient};` : ""}
     }`,
-    `body { background-color: ${bg} !important; color: ${text} !important; }`,
-    `::selection { background-color: ${primary} !important; color: ${bg} !important; }`,
+    `html:not([data-theme="light"]):not(.light) body, html[data-theme="dark"] body { background-color: ${bg} !important; color: ${text} !important; }`,
+    `html[data-theme="light"] body, html.light body { background-color: #f7f8fa !important; color: #111418 !important; }`,
+    `html:not([data-theme="light"]):not(.light) ::selection { background-color: ${primary} !important; color: ${bg} !important; }`,
+    `html[data-theme="light"] ::selection, html.light ::selection { background-color: #111418 !important; color: #ffffff !important; }`,
     gradient
-      ? `button.bg-lime, a.bg-lime, .bg-lime { background: ${gradient} !important; }
-         .accent-gradient-text { background: ${gradient} !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }`
+      ? `html:not([data-theme="light"]):not(.light) button.bg-lime, html:not([data-theme="light"]):not(.light) a.bg-lime, html:not([data-theme="light"]):not(.light) .bg-lime { background: ${gradient} !important; }
+         html:not([data-theme="light"]):not(.light) .accent-gradient-text { background: ${gradient} !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }`
       : `.accent-gradient-text { color: ${primary} !important; -webkit-text-fill-color: initial !important; background: none !important; }`,
   ]
     .filter(Boolean)
     .join("\n");
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('site_theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light');}else{document.documentElement.setAttribute('data-theme','dark');document.documentElement.classList.add('dark');}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="font-body bg-ink text-paper antialiased">
         {themeOverrides && (
           <style dangerouslySetInnerHTML={{ __html: themeOverrides }} />

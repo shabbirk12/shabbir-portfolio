@@ -13,27 +13,27 @@ export default function LoadingScreen({ onDone }: { onDone?: () => void }) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6, ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0A0A0A]"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ink text-paper"
         >
           <div className="flex items-baseline gap-2 font-display tabular-nums">
             <motion.span
               key={Math.floor(progress / 100)}
-              className="text-[22vw] leading-none text-white sm:text-[16vw] md:text-[12vw]"
+              className="text-[22vw] leading-none text-paper sm:text-[16vw] md:text-[12vw]"
             >
               {progress}
             </motion.span>
-            <span className="text-3xl text-white/40 sm:text-4xl md:text-5xl">%</span>
+            <span className="text-3xl text-muted sm:text-4xl md:text-5xl">%</span>
           </div>
 
-          <div className="mt-6 h-px w-40 overflow-hidden bg-white/10 sm:w-56">
+          <div className="mt-6 h-px w-40 overflow-hidden bg-line sm:w-56">
             <motion.div
-              className="h-full bg-[#C8FF3D]"
+              className="h-full bg-lime"
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.2, ease: "linear" }}
             />
           </div>
 
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.3em] text-white/40">
+          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">
             Loading site
           </p>
         </motion.div>

@@ -158,6 +158,14 @@ const HalftoneField: React.FC<{ accent: string }> = ({ accent }) => {
           const r = 1.1 + eased * 3.4;
           const alpha = 0.16 + eased * 0.72;
 
+          const isLight =
+            typeof document !== "undefined" &&
+            (document.documentElement.getAttribute("data-theme") === "light" ||
+              document.documentElement.classList.contains("light"));
+          const baseDotColor = isLight
+            ? `rgba(0,0,0,${alpha * 0.22})`
+            : `rgba(255,255,255,${alpha * 0.35})`;
+
           ctx.beginPath();
           ctx.arc(x, y, r, 0, Math.PI * 2);
           ctx.fillStyle =
@@ -165,7 +173,7 @@ const HalftoneField: React.FC<{ accent: string }> = ({ accent }) => {
               ? `${accent}${Math.round(alpha * 255)
                   .toString(16)
                   .padStart(2, "0")}`
-              : `rgba(255,255,255,${alpha * 0.35})`;
+              : baseDotColor;
           ctx.fill();
         }
       }
@@ -352,21 +360,21 @@ export default function Hero() {
             <div className="flex flex-wrap gap-3 md:justify-end">
               <button
                 onClick={() => scrollTo("#work")}
-                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition-transform hover:-translate-y-0.5"
+                className="group inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5 shadow-sm"
               >
                 See the Work
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </button>
               <button
                 onClick={() => scrollTo("#contact")}
-                className="group inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-lime hover:text-lime"
+                className="group inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-lime hover:text-lime"
               >
                 Let&apos;s Build
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
               <Link
                 href="/resume"
-                className="group inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-lime hover:text-lime"
+                className="group inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold text-paper transition-colors hover:border-lime hover:text-lime"
               >
                 Resume ↗
               </Link>

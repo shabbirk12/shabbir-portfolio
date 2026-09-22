@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { profile } from "@/lib/data";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function ResumePage() {
   function handlePrint() {
@@ -23,10 +24,11 @@ export default function ResumePage() {
         </Link>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-2 border border-line px-4 py-2 rounded-full font-mono text-xs tracking-widest2 text-paper hover:border-lime hover:text-lime transition-colors"
+            className="inline-flex items-center gap-2 border border-line px-4 py-2 rounded-full font-mono text-xs tracking-widest2 text-paper hover:border-lime hover:text-lime transition-colors cursor-pointer"
           >
             🖨️ PRINT RESUME
           </button>

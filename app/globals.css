@@ -20,6 +20,110 @@
   --font-script: "Instrument Serif", "Caveat", serif, cursive;
 }
 
+/* ─── LIGHT THEME (tint of white background) ─── */
+html[data-theme="light"],
+html.light {
+  --color-ink-rgb: 247 248 250;
+  --color-ink: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface2: #f0f2f5;
+  --color-line: #e2e8f0;
+  --color-paper-rgb: 17 20 24;
+  --color-paper: #111418;
+  --color-muted: #5f6975;
+  --color-lime-glow: rgba(0, 0, 0, 0.08);
+  scrollbar-color: #cbd5e1 #f7f8fa;
+}
+
+html[data-theme="light"] body,
+html.light body {
+  background-color: #f7f8fa !important;
+  color: #111418 !important;
+}
+
+html[data-theme="light"] *,
+html.light * {
+  scrollbar-color: #cbd5e1 #f7f8fa;
+}
+
+/* Light mode accent and contrast refinements */
+html[data-theme="light"] .text-lime,
+html.light .text-lime {
+  color: #15803d !important;
+}
+
+html[data-theme="light"] .hover\:text-lime:hover,
+html.light .hover\:text-lime:hover {
+  color: #15803d !important;
+}
+
+html[data-theme="light"] .bg-lime,
+html.light .bg-lime {
+  background-color: #111418 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] .hover\:bg-lime:hover,
+html.light .hover\:bg-lime:hover {
+  background-color: #111418 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] .fill-hover:hover,
+html.light .fill-hover:hover {
+  background-color: #111418 !important;
+  border-color: #111418 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] .fill-hover:hover .fill-fade,
+html.light .fill-hover:hover .fill-fade {
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] .fill-hover:hover .fill-muted,
+html.light .fill-hover:hover .fill-muted {
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="light"] .hover\:border-lime:hover,
+html.light .hover\:border-lime:hover {
+  border-color: #111418 !important;
+}
+
+html[data-theme="light"] .card-glow:hover,
+html.light .card-glow:hover {
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="light"] .grain-overlay,
+html.light .grain-overlay {
+  opacity: 0.02;
+  mix-blend-mode: multiply;
+}
+
+html[data-theme="light"] .ambient-blob,
+html.light .ambient-blob {
+  opacity: 0.12;
+}
+
+html[data-theme="light"] .corner-bracket,
+html.light .corner-bracket {
+  border-color: #15803d !important;
+}
+
+html[data-theme="light"] .underline-sweep::after,
+html.light .underline-sweep::after {
+  background: #15803d !important;
+}
+
+html[data-theme="light"] .text-stroke,
+html.light .text-stroke {
+  -webkit-text-stroke: 1px #cbd5e1;
+}
+
+
 @layer base {
   .font-display {
     font-weight: 600;
